@@ -31,7 +31,7 @@ void Pencil::SetColor(MyImage::RGBQUAD v) {
 
 QVector<QPoint> GetCircle(QRect rect, QPoint p, int r) {
     QVector<QPoint> list;
-
+    return QVector<QPoint>();
 }
 
 void Pencil::DrawPoint(QPoint p) {
