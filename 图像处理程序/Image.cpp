@@ -1,6 +1,11 @@
 #include"Image.h"
 #include<fstream>
 using namespace MyImage;
+
+const Image& MyImage::Image::ToGrayScale() {
+	QImage res
+}
+
 Image* MyImage::Image::ReadImage(const char* filename) {
 
 	//读取文件头和信息头
@@ -153,3 +158,4 @@ const RGBQUAD* MyImage::BitMap_32::GetBits() const {
 void MyImage::BitMap_32::Flip(bool code) {
 	_data->Flip(code);
 }
+

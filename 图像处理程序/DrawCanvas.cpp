@@ -23,6 +23,7 @@ void DrawCanvas::Undo() {
 	DrawCommand* cur = _historyCommand.pop();
 	cur->Unexecute();
 	_redoCommand.push(cur);
+	update();
 }
 
 void DrawCanvas::Redo() {
@@ -32,6 +33,7 @@ void DrawCanvas::Redo() {
 	DrawCommand* cur = _redoCommand.pop();
 	cur->Execute();
 	_historyCommand.push(cur);
+	update();
 }
 
 void DrawCanvas::ClearCommand() {
@@ -56,6 +58,8 @@ void DrawCanvas::AddLayer(const MyImage::Image& im) {
 		_scale = labMac * 100.0f / picMax;
 	}
 	_layers.push_back(im.Clone());
+	_seletcted.clear();
+	_seletcted.push_back(_layers.size() - 1);
 	update();
 }
 
@@ -65,6 +69,8 @@ void DrawCanvas::InsertLayer(const MyImage::Image& im, int i) {
 		return;
 	}
 	_layers.insert(i, im.Clone());
+	_seletcted.clear();
+	_seletcted.push_back(i);
 	update();
 }
 
@@ -97,11 +103,26 @@ float DrawCanvas::GetScale() {
 	return _scale;
 }
 
-void DrawCanvas::SaveImage(const QString&) {
-	//Todo:Ð´ÈëÎÄ¼þ
+QPoint DrawCanvas::GetDrawPoint() {
+	return _drawPoint;
+}
+
+void DrawCanvas::SaveImage(const QString& fileName) {
+	int h = _layers[0]->GetHeight();
+	int w = _layers[0]->GetWidth();
+	MyImage::BitMap_32 res(h, w);
+	for (int i = 0; i < h; ++i) {
+		for (int j = 0; j < w; ++j) {
+			for (int k = 0; k < _layers.size(); ++k) {
+				res.SetPixel(i, j, _layers[k]->GetPixel(i, j));
+			}
+		}
+	}
+	res.WriteImage(fileName.toLatin1().data());
 }
 
 void DrawCanvas::PushCommand(DrawCommand* c) {
+	ClearRedoCommand();
 	_historyCommand.push(c);
 }
 
@@ -152,9 +173,13 @@ void DrawCanvas::mouseMoveEvent(QMouseEvent* e) {
 	update();
 }
 
-void DrawCanvas::contextMenuEvent(QContextMenuEvent*) {}
+void DrawCanvas::contextMenuEvent(QContextMenuEvent*e) {
+	QWidget::contextMenuEvent(e);
+}
 
-void DrawCanvas::keyPressEvent(QKeyEvent* e) {}
+void DrawCanvas::keyPressEvent(QKeyEvent* e) {
+	QWidget::keyPressEvent(e);
+}
 
 void DrawCanvas::resizeEvent(QResizeEvent* e) {
 	_ui.horizontalScrollBar->setRange(0, e->size().width());

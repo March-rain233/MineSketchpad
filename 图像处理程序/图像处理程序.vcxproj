@@ -21,6 +21,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <PlatformToolset>v142</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
@@ -90,6 +91,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Tools.cpp" />
     <QtRcc Include="PhotoshopLike.qrc" />
     <QtUic Include="CreateImage.ui" />
     <QtUic Include="DrawCanvas.ui" />
@@ -103,9 +105,11 @@
     <ClCompile Include="Pencil.cpp" />
     <ClCompile Include="PhotoshopLike.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="Tools.ui" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Pencil.h" />
+    <QtMoc Include="Tools.h" />
     <QtMoc Include="DrawCanvas.h" />
     <QtMoc Include="CreateImage.h" />
     <ClInclude Include="DrawCommand.h" />

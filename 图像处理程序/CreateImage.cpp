@@ -19,6 +19,8 @@ CreateImage::CreateImage(QWidget *parent)
 	SetColor(Qt::white);
 	SetHeight(500);
 	SetWidth(500);
+	_filename = QString::fromLocal8Bit("ÐÂ½¨»­²¼");
+	_ui.filename->setText(_filename);
 	_ui.height->setText(QString::number(_height));
 	_ui.width->setText(QString::number(_width));
 	connect(_ui.filename, &QTextEdit::textChanged, [this] {

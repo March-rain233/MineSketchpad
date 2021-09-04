@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1304</width>
-    <height>677</height>
+    <width>1031</width>
+    <height>602</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -15,6 +15,21 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <item row="0" column="0">
      <widget class="DrawCanvas" name="widget" native="true"/>
     </item>
@@ -25,7 +40,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1304</width>
+     <width>1031</width>
      <height>26</height>
     </rect>
    </property>
@@ -46,8 +61,8 @@
     <addaction name="openImage"/>
     <addaction name="separator"/>
     <addaction name="action3"/>
-    <addaction name="actiona"/>
-    <addaction name="action4"/>
+    <addaction name="saveAs"/>
+    <addaction name="save"/>
     <addaction name="separator"/>
     <addaction name="menu_E_2"/>
     <addaction name="action6"/>
@@ -161,14 +176,6 @@
    <addaction name="menu_I"/>
    <addaction name="menu_L"/>
   </widget>
-  <widget class="QToolBar" name="mainToolBar">
-   <attribute name="toolBarArea">
-    <enum>LeftToolBarArea</enum>
-   </attribute>
-   <attribute name="toolBarBreak">
-    <bool>false</bool>
-   </attribute>
-  </widget>
   <widget class="QStatusBar" name="statusBar"/>
   <action name="createImage">
    <property name="text">
@@ -185,9 +192,12 @@
     <string>关闭(C)</string>
    </property>
   </action>
-  <action name="action4">
+  <action name="save">
    <property name="text">
     <string>存储(S)</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+S</string>
    </property>
   </action>
   <action name="action6">
@@ -516,9 +526,12 @@
     <string>导出首选项</string>
    </property>
   </action>
-  <action name="actiona">
+  <action name="saveAs">
    <property name="text">
     <string>另存为(&amp;A)……</string>
+   </property>
+   <property name="shortcut">
+    <string>Ctrl+Shift+S</string>
    </property>
   </action>
  </widget>

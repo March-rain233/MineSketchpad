@@ -23,7 +23,7 @@ public:
 //像素修改命令
 class PaintCommand :public DrawCommand {
 public:
-	PaintCommand(QVector<MyImage::Image*>&);
+	PaintCommand(const QVector<MyImage::Image*>&);
 	~PaintCommand();
 	// 通过 DrawCommand 继承
 	virtual void Execute() override;
@@ -39,6 +39,6 @@ private:
 		MyImage::RGBQUAD After;
 	};
 	QVector<PixelInfo*> _changedPixel;//修改的数据
-	QVector<MyImage::Image*>& _target;//修改对象
+	const QVector<MyImage::Image*>& _target;//修改对象
 };
 

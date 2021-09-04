@@ -35,6 +35,8 @@ public:
 	void SetScale(float);//设置缩放率
 	float GetScale();//获得缩放率
 
+	QPoint GetDrawPoint();//获得绘画起始点
+
 	void SaveImage(const QString&);// 储存文件
 
 	void PushCommand(DrawCommand*);//加入已执行命令

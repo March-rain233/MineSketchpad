@@ -54,6 +54,7 @@ namespace MyImage {
 		virtual QImage ToQImage() const = 0;//转换为QImage
 		virtual const RGBQUAD* GetBits() const = 0;//获取一维像素数组
 		virtual Image& operator=(const Image&) = 0;//深拷贝
+		virtual const Image& ToGrayScale();
 	};
 
 	class BitMap_32 : public Image {
