@@ -9,8 +9,14 @@ class DrawCanvas;
 //绘画工具基类
 class DrawTools {
 public:
-	virtual bool mousePressEvent(QMouseEvent*, DrawCanvas*) = 0;//鼠标按下事件
-	virtual bool mouseReleaseEvent(QMouseEvent*, DrawCanvas*) = 0;//鼠标释放事件
-	virtual bool mouseMoveEvent(QMouseEvent*, DrawCanvas*) = 0;//鼠标移动事件
+	void Rigister(DrawCanvas*);//注册绘制设备
+	void Unrigister();//注销绘制设备
+	virtual bool mousePressEvent(QMouseEvent*) = 0;//鼠标按下事件
+	virtual bool mouseReleaseEvent(QMouseEvent*) = 0;//鼠标释放事件
+	virtual bool mouseMoveEvent(QMouseEvent*) = 0;//鼠标移动事件
+protected:
+	DrawCanvas& GetDevice();
+private:
+	DrawCanvas* _device;
 };
 

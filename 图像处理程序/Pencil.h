@@ -4,9 +4,9 @@
 class Pencil: public DrawTools {
 public:
 	// 通过 DrawTools 继承
-	virtual bool mousePressEvent(QMouseEvent*, DrawCanvas*) override;
-	virtual bool mouseReleaseEvent(QMouseEvent*, DrawCanvas*) override;
-	virtual bool mouseMoveEvent(QMouseEvent*, DrawCanvas*) override;
+	virtual bool mousePressEvent(QMouseEvent*) override;
+	virtual bool mouseReleaseEvent(QMouseEvent*) override;
+	virtual bool mouseMoveEvent(QMouseEvent*) override;
 	
 	void SetRadius(int);//设置半径
 	void SetColor(MyImage::RGBQUAD);//设置颜色

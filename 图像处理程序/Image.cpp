@@ -3,7 +3,16 @@
 using namespace MyImage;
 
 const Image& MyImage::Image::ToGrayScale() {
-	QImage res
+	BitMap_32 res(GetHeight(), GetWidth());
+	for (int i = 0; i < GetHeight(); ++i) {
+		for (int j = 0; j < GetWidth(); ++j) {
+			RGBQUAD temp = GetPixel(i, j);
+			temp.rgbBlue = temp.rgbGreen = temp.rgbRed = 
+				(temp.rgbRed * 299 + temp.rgbGreen * 587 + temp.rgbBlue * 114) / 1000;
+			res.SetPixel(i, j, temp);
+		}
+	}
+	return res;
 }
 
 Image* MyImage::Image::ReadImage(const char* filename) {

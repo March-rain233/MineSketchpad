@@ -1,34 +1,34 @@
 #include "Pencil.h"
 
-bool Pencil::mousePressEvent(QMouseEvent* e, DrawCanvas* canvas) {
-    if (canvas->GetSelected().size() != 1) {
+bool Pencil::mousePressEvent(QMouseEvent* e) {
+    if (GetDevice().GetSelected().size() != 1) {
         return false;
     }
-    _command = new PaintCommand(canvas->GetLayers());
+    _command = new PaintCommand(GetDevice().GetLayers());
     _startPoint = e->pos();
     return true;
 }
 
-bool Pencil::mouseReleaseEvent(QMouseEvent* e, DrawCanvas* canvas) {
-    if (canvas->GetSelected().size() != 1) {
+bool Pencil::mouseReleaseEvent(QMouseEvent* e) {
+    if (GetDevice().GetSelected().size() != 1) {
         return false;
     }
     if (_command != nullptr) {
-        DrawLine(TransformPoint(_startPoint, canvas),
-            TransformPoint(e->pos(), canvas), canvas->GetSelected()[0]);
-        canvas->PushCommand(_command);
+        DrawLine(TransformPoint(_startPoint, &GetDevice()),
+            TransformPoint(e->pos(), &GetDevice()), GetDevice().GetSelected()[0]);
+        GetDevice().PushCommand(_command);
         _command = nullptr;
     }
     return false;
 }
 
-bool Pencil::mouseMoveEvent(QMouseEvent* e, DrawCanvas* canvas) {
-    if (canvas->GetSelected().size() != 1) {
+bool Pencil::mouseMoveEvent(QMouseEvent* e) {
+    if (GetDevice().GetSelected().size() != 1) {
         return false;
     }
     if (_command != nullptr) {
-        DrawLine(TransformPoint(_startPoint, canvas),
-            TransformPoint(e->pos(), canvas), canvas->GetSelected()[0]);
+        DrawLine(TransformPoint(_startPoint, &GetDevice()),
+            TransformPoint(e->pos(), &GetDevice()), GetDevice().GetSelected()[0]);
         _startPoint = e->pos();
     }
     return false;

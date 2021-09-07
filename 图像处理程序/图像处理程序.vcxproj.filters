@@ -64,6 +64,21 @@
     <ClCompile Include="Tools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Mat.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ToolFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Eraser.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyPaletteModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MyPalette.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawCommand.h">
@@ -81,6 +96,18 @@
     <ClInclude Include="Pencil.h">
       <Filter>Header Files\DrawTools</Filter>
     </ClInclude>
+    <ClInclude Include="ToolFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Eraser.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyPaletteModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MyEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="DrawCanvas.h">
@@ -92,6 +119,9 @@
     <QtMoc Include="Tools.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="MyPalette.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DrawCanvas.ui">
@@ -101,6 +131,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="Tools.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="MyPalette.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

@@ -8,6 +8,8 @@
 PhotoshopLike::PhotoshopLike(QWidget* parent)
 	: QMainWindow(parent) {
 	ui.setupUi(this);
+	//setWindowFlags(Qt::FramelessWindowHint);
+
 	connect(ui.openImage, &QAction::triggered, this, &PhotoshopLike::OpenImage);
 	connect(ui.createImage, &QAction::triggered, this, &PhotoshopLike::CreateNewImage);
 

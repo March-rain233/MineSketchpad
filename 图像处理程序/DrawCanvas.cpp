@@ -127,7 +127,11 @@ void DrawCanvas::PushCommand(DrawCommand* c) {
 }
 
 void DrawCanvas::SetTool(DrawTools* t) {
+	if (_tool != nullptr) {
+		_tool->Unrigister();
+	}
 	_tool = t;
+	_tool->Rigister(this);
 }
 
 void DrawCanvas::ClearCanvas() {
@@ -147,7 +151,7 @@ void DrawCanvas::mousePressEvent(QMouseEvent* e) {
 	if (IsEmpty() || _tool == nullptr) {
 		return;
 	}
-	if (!_tool->mousePressEvent(e, this)) {
+	if (!_tool->mousePressEvent(e)) {
 
 	}
 	update();
@@ -157,7 +161,7 @@ void DrawCanvas::mouseReleaseEvent(QMouseEvent* e) {
 	if (IsEmpty() || _tool == nullptr) {
 		return;
 	}
-	if (!_tool->mouseReleaseEvent(e, this)) {
+	if (!_tool->mouseReleaseEvent(e)) {
 
 	}
 	update();
@@ -167,7 +171,7 @@ void DrawCanvas::mouseMoveEvent(QMouseEvent* e) {
 	if (IsEmpty() || _tool == nullptr) {
 		return;
 	}
-	if (!_tool->mouseMoveEvent(e, this)) {
+	if (!_tool->mouseMoveEvent(e)) {
 
 	}
 	update();

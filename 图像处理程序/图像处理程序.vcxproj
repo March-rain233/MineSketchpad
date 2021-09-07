@@ -91,10 +91,16 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Eraser.cpp" />
+    <ClCompile Include="Mat.cpp" />
+    <ClCompile Include="MyPalette.cpp" />
+    <ClCompile Include="MyPaletteModel.cpp" />
+    <ClCompile Include="ToolFactory.cpp" />
     <ClCompile Include="Tools.cpp" />
     <QtRcc Include="PhotoshopLike.qrc" />
     <QtUic Include="CreateImage.ui" />
     <QtUic Include="DrawCanvas.ui" />
+    <QtUic Include="MyPalette.ui" />
     <QtUic Include="PhotoshopLike.ui" />
     <QtMoc Include="PhotoshopLike.h" />
     <ClCompile Include="CreateImage.cpp" />
@@ -108,7 +114,12 @@
     <QtUic Include="Tools.ui" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Eraser.h" />
+    <QtMoc Include="MyPalette.h" />
+    <ClInclude Include="MyEvent.h" />
+    <ClInclude Include="MyPaletteModel.h" />
     <ClInclude Include="Pencil.h" />
+    <ClInclude Include="ToolFactory.h" />
     <QtMoc Include="Tools.h" />
     <QtMoc Include="DrawCanvas.h" />
     <QtMoc Include="CreateImage.h" />

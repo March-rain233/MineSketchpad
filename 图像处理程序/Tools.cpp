@@ -1,4 +1,5 @@
 #include "Tools.h"
+#include"ToolFactory.h"
 
 Tools::Tools(QWidget *parent)
 	: QWidget(parent)
@@ -8,4 +9,11 @@ Tools::Tools(QWidget *parent)
 
 Tools::~Tools()
 {
+
+}
+
+void Tools::Rigister(DrawCanvas*) {}
+
+void Tools::SetTool(QString name) {
+	_device->SetTool(ToolFactory::GetInstance().GetTool(name));
 }

@@ -129,6 +129,23 @@ public:
     }
     //另外，用友元函数再写出一个T类型的数和一个Mat对象的加,减,乘,除
 
+    friend Mat<T> operator*(const Mat<T>& m1, const Mat<T>& m2) {
+        if (m1.Width() != m2.Height()) {
+            throw std::exception("无法相乘");
+        }
+        Mat<T> res(m1.Height(), m2.Width());
+        for (int i = 0; i < m1.Height(); ++i) {
+            for (int j = 0; j < m2.Width(); ++j) {
+                T temp = 0;
+                for (int k = 0; k < m1.Width(); ++k) {
+                    temp += m1.At(i, k) * m2.At(k, j);
+                }
+                res.Set(i, j, temp);
+            }
+        }
+        return res;
+    }
+
     Mat<bool> gray2bw(T t); //以给定阈值t进行二值化，返回结果对象
     T* GetBits();
     const T* GetBits() const;//获取存储的数组
@@ -371,19 +388,43 @@ inline void Mat<T, compare>::Crop(int x1, int y1, int x2, int y2) {
 
 template<typename T, typename compare>
 inline void Mat<T, compare>::Rotate(int degree) {
-    //todo:
+    for (int ctr = 0; ctr < degree / 90; ++ctr) {
+        Transpose();
+        for (int i = 0; i < _height; ++i) {
+            std::reverse(&_data[i * _width], &_data[i * _width + _width - 1]);
+        }
+    }
 }
 
 template<typename T, typename compare>
 inline void Mat<T, compare>::Transpose() {
-    T* data = new T[_height * _width];
-    for (int i = 0; i < _width; ++i) {
-        for (int j = 0; j < _height; ++j) {
-            data[i * _height + j] = _data[j * _width + i];
+    int total = _height * _width;
+    for (int i = 0; i < total; ++i) {
+        //先判断是否为处理过的环,当索引的后置有小于索引的值时可判断改环已被处理
+        int next = i;
+        do {
+            next = (next % _width) * _height + next / _width;//获取轮换后序
+        } while (next > i);
+
+        //对未处理过的环进行轮换
+        if (next == i) {
+            int cur = i;
+            int pre = (cur % _height) * _width + cur / _height;
+            if (pre == cur) {
+                continue;
+            }
+
+            do {
+                if (pre == cur) {
+                    break;
+                }
+                //交换元素
+                std::swap(_data[cur], _data[pre]);
+                cur = pre;
+                pre = (cur % _height) * _width + cur / _height;//获取轮换前序
+            } while (pre != i);
         }
     }
-    delete[]_data;
-    _data = data;
     std::swap(_width, _height);
 }
 
