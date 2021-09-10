@@ -1,4 +1,5 @@
 #include "Pencil.h"
+#include "MyPaletteModel.h"
 
 bool Pencil::mousePressEvent(QMouseEvent* e) {
     if (GetDevice().GetSelected().size() != 1) {
@@ -34,12 +35,19 @@ bool Pencil::mouseMoveEvent(QMouseEvent* e) {
     return false;
 }
 
-void Pencil::SetRadius(int v) {
-    _radius = v;
+void Pencil::SetAlpha(unsigned char v) {
+    _alpha = v;
+    AlphaChanged(v);
 }
 
-void Pencil::SetColor(MyImage::RGBQUAD v) {
-    _color = v;
+void Pencil::SetRadius(int v) {
+    _radius = v;
+    RadiusChanged(v);
+}
+
+void Pencil::UpdateAll() {
+    AlphaChanged(_alpha);
+    RadiusChanged(_radius);
 }
 
 QPoint Pencil::TransformPoint(QPoint p, DrawCanvas* canvas) {
@@ -50,9 +58,12 @@ QPoint Pencil::TransformPoint(QPoint p, DrawCanvas* canvas) {
     return res;
 }
 
-void FillRow(int x1, int y1, int x2, int y2, MyImage::RGBQUAD v, PaintCommand* c, int layer) {
+void Pencil::FillRow(int x1, int x2, int y, MyImage::RGBQUAD v) {
+    DrawCanvas& device = GetDevice();
+    int layer = device.GetSelected()[0];
     for (int i = x1; i <= x2; ++i) {
-        c->SetPixel(layer, y1, i, v);
+        _command->SetPixel(layer, y, i, 
+            OverplayMode(v,device.GetLayers()[layer]->GetPixel(i,y)));
     }
 }
 
@@ -62,6 +73,8 @@ void Pencil::DrawPoint(QPoint p, int layer) {
     int xymax = _radius / 1.414;//45°线与圆的交点坐标(取整)
     int x = p.x();
     int y = p.y();
+
+    auto color = GetColor();
     for (i = 0; i <= xymax; i++)//遍历x轴，45°~90°区域
     {
         j = 0;
@@ -69,10 +82,10 @@ void Pencil::DrawPoint(QPoint p, int layer) {
             j++;
         }
         ym = (i * i + j * j - _radius * _radius - j < 0) ? j : (j - 1);//边界内外侧更接近圆的坐标
-        FillRow(x - i, y - ym, x + i, y - ym, _color, _command, layer); //按行填充
-        FillRow(x - i, y + ym, x + i, y + ym, _color, _command, layer);
-        FillRow(x - ym, y - i, x + ym, y - i, _color, _command, layer);
-        FillRow(x - ym, y + i, x + ym, y + i, _color, _command, layer);
+        FillRow(x - i, x + i, y - ym, color); //按行填充
+        FillRow(x - i, x + i, y + ym, color);
+        FillRow(x - ym, x + ym, y - i, color);
+        FillRow(x - ym, x + ym, y + i, color);
     }
 }
 

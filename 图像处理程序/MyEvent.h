@@ -29,8 +29,13 @@ private:
 			return;
 		}
 		for (auto f : _list) {
-			f(args...);
+			if (f) {
+				f(args...);
+			}
 		}
+	}
+	void operator()(Arg... args) {
+		Invoke(args...);
 	}
 private:
 	QVector<std::function<void(Arg...)>> _list;

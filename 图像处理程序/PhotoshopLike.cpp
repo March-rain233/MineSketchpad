@@ -1,5 +1,6 @@
 #include "PhotoshopLike.h"
 #include "Image.h"
+#include "ToolFactory.h"
 #include "Pencil.h"
 #include "CreateImage.h"
 #include <qstandardpaths.h>
@@ -19,10 +20,10 @@ PhotoshopLike::PhotoshopLike(QWidget* parent)
 	connect(ui.redo, &QAction::triggered, [this] {
 		ui.widget->Redo();
 		});
-
 	connect(ui.save, &QAction::triggered, this, &PhotoshopLike::SaveImage);
 	connect(ui.saveAs, &QAction::triggered, this, &PhotoshopLike::SaveNewImage);
-	ui.widget->SetTool(new Pencil());
+
+	ui.Tool->Rigister(ui.widget);
 }
 
 void PhotoshopLike::OpenImage() {

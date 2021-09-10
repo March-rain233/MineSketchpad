@@ -23,11 +23,18 @@ void MyPaletteModel::DeleteColor(int index) {
 
 void MyPaletteModel::SwapColor() {
     std::swap(_frontColor, _backColor);
+    FrontColorChange(_frontColor);
+    BackColorChange(_backColor);
 }
 
 void MyPaletteModel::SetFrontColor(MyImage::RGBQUAD color) {
     _frontColor = color;
     FrontColorChange.Invoke(color);
+}
+
+void MyPaletteModel::SetBackColor(MyImage::RGBQUAD v) {
+    _backColor = v;
+    BackColorChange(v);
 }
 
 MyImage::RGBQUAD MyPaletteModel::GetFrontColor() {

@@ -6,9 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>577</width>
-    <height>479</height>
+    <width>593</width>
+    <height>450</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="acceptDrops">
    <bool>false</bool>
@@ -78,162 +84,166 @@
     </layout>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="RGBmenu">
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,15,1">
-       <item>
-        <widget class="QLabel" name="label_2">
-         <property name="text">
-          <string>R</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSlider" name="R">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="RV">
-         <property name="text">
-          <string>1</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,15,1">
-       <item>
-        <widget class="QLabel" name="label">
-         <property name="text">
-          <string>G</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSlider" name="G">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="GV">
-         <property name="text">
-          <string>1</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,15,1">
-       <item>
-        <widget class="QLabel" name="label_5">
-         <property name="text">
-          <string>B</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSlider" name="B">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="BV">
-         <property name="text">
-          <string>1</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
+    <widget class="QWidget" name="RGBmenu" native="true">
+     <layout class="QVBoxLayout" name="layout">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_6" stretch="0,15,1">
+        <item>
+         <widget class="QLabel" name="label_2">
+          <property name="text">
+           <string>R</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="R">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="RV">
+          <property name="text">
+           <string>1</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout" stretch="0,15,1">
+        <item>
+         <widget class="QLabel" name="label">
+          <property name="text">
+           <string>G</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="G">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="GV">
+          <property name="text">
+           <string>1</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_9" stretch="0,15,1">
+        <item>
+         <widget class="QLabel" name="label_5">
+          <property name="text">
+           <string>B</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="B">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="BV">
+          <property name="text">
+           <string>1</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
    <item>
-    <layout class="QVBoxLayout" name="HSLmenu" stretch="0,0,0">
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,15,1">
-       <item>
-        <widget class="QLabel" name="label_3">
-         <property name="text">
-          <string>H</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSlider" name="H">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="HV">
-         <property name="text">
-          <string>1</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,15,1">
-       <item>
-        <widget class="QLabel" name="label_4">
-         <property name="text">
-          <string>S</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSlider" name="S">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="SV">
-         <property name="text">
-          <string>1</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
-      <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="0,15,1">
-       <item>
-        <widget class="QLabel" name="label_6">
-         <property name="text">
-          <string>L</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QSlider" name="L">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QLabel" name="LV">
-         <property name="text">
-          <string>1</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-    </layout>
+    <widget class="QWidget" name="HSLmenu" native="true">
+     <layout class="QVBoxLayout" name="_2" stretch="0,0,0">
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_7" stretch="0,15,1">
+        <item>
+         <widget class="QLabel" name="label_3">
+          <property name="text">
+           <string>H</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="H">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="HV">
+          <property name="text">
+           <string>1</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_8" stretch="0,15,1">
+        <item>
+         <widget class="QLabel" name="label_4">
+          <property name="text">
+           <string>S</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="S">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="SV">
+          <property name="text">
+           <string>1</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item>
+       <layout class="QHBoxLayout" name="horizontalLayout_10" stretch="0,15,1">
+        <item>
+         <widget class="QLabel" name="label_6">
+          <property name="text">
+           <string>L</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QSlider" name="L">
+          <property name="orientation">
+           <enum>Qt::Horizontal</enum>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLabel" name="LV">
+          <property name="text">
+           <string>1</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+     </layout>
+    </widget>
    </item>
   </layout>
  </widget>

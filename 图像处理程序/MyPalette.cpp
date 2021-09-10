@@ -2,6 +2,7 @@
 #include "MyPaletteModel.h"
 #include "Image.h"
 #include "qdebug.h"
+#include <qbuttongroup.h>
 
 void RGBToHSL(MyImage::RGBQUAD color, double& h, double& s, double& l) {
 	double M = std::max(color.rgbBlue, std::max(color.rgbGreen, color.rgbRed));
@@ -29,13 +30,14 @@ void RGBToHSL(MyImage::RGBQUAD color, double& h, double& s, double& l) {
 	if (h > 360) {
 		h -= 360;
 	}
+	s = s * 100 / 255;
 	l = l * 100 / 255;
-	s *= 100;
 }
 MyImage::RGBQUAD HSLToRGB(double h, double s, double l) {
 	MyImage::RGBQUAD res;
 	res.rgbReserved = 255;
 	l = l * 255 / 100;
+	s = s * 255 / 100;
 	double c1o60 = 1.0 / 60.0;
 	double c1o255 = 1.0 / 255.0;
 	double v1, v2, v3, h1;
@@ -120,31 +122,66 @@ MyPalette::MyPalette(QWidget *parent)
 		ui.H->setValue(h);
 		ui.S->setValue(s);
 		ui.L->setValue(l);
+		ui.RV->setText(QString::number(v.rgbRed));
+		ui.GV->setText(QString::number(v.rgbGreen));
+		ui.BV->setText(QString::number(v.rgbBlue));
+		ui.HV->setText(QString::number((int)h));
+		ui.SV->setText(QString::number((int)s));
+		ui.LV->setText(QString::number((int)l));
 		qDebug() << "color";
 	};
-	connect(ui.R, &QSlider::valueChanged, [&instance](int v) {
+	connect(ui.R, &QSlider::sliderMoved, [&instance](int v) {
 		auto t = instance.GetFrontColor();
+		if (t.rgbRed == v) { return; }
 		t.rgbRed = v;
 		instance.SetFrontColor(t);
 		});
-	connect(ui.G, &QSlider::valueChanged, [&instance](int v) {
+	connect(ui.G, &QSlider::sliderMoved, [&instance](int v) {
 		auto t = instance.GetFrontColor();
+		if (t.rgbGreen == v) { return; }
 		t.rgbGreen = v;
 		instance.SetFrontColor(t);
 		});
-	connect(ui.B, &QSlider::valueChanged, [&instance](int v) {
+	connect(ui.B, &QSlider::sliderMoved, [&instance](int v) {
 		auto t = instance.GetFrontColor();
+		if (t.rgbBlue == v) { return; }
 		t.rgbBlue = v;
 		instance.SetFrontColor(t);
 		});
-	connect(ui.H, &QSlider::valueChanged, [&instance, this](int v) {
-		instance.SetFrontColor(HSLToRGB(ui.H->value(), ui.S->value(), ui.L->value()));
+	connect(ui.H, &QSlider::sliderMoved, [&instance, this](int v) {
+		double h, s, l;
+		RGBToHSL(instance.GetFrontColor(), h, s, l);
+		h = v;
+		instance.SetFrontColor(HSLToRGB(h, s, l));
 		});
-	connect(ui.S, &QSlider::valueChanged, [&instance, this](int v) {
-		instance.SetFrontColor(HSLToRGB(ui.H->value(), ui.S->value(), ui.L->value()));
+	connect(ui.S, &QSlider::sliderMoved, [&instance, this](int v) {
+		double h, s, l;
+		RGBToHSL(instance.GetFrontColor(), h, s, l);
+		s = v;
+		instance.SetFrontColor(HSLToRGB(h, s, l));
 		});
-	connect(ui.L, &QSlider::valueChanged, [&instance, this](int v) {
-		instance.SetFrontColor(HSLToRGB(ui.H->value(), ui.S->value(), ui.L->value()));
+	connect(ui.L, &QSlider::sliderMoved, [&instance, this](int v) {
+		double h, s, l;
+		RGBToHSL(instance.GetFrontColor(), h, s, l);
+		l = v;
+		instance.SetFrontColor(HSLToRGB(h, s, l));
+		});
+	
+	connect(ui.RGB, &QAbstractButton::toggled, [this](bool v) {
+		if (v) {
+			ui.RGBmenu->show();
+		}
+		else {
+			ui.RGBmenu->hide();
+		}
+		});
+	connect(ui.HSL, &QAbstractButton::toggled, [this](bool v) {
+		if (v) {
+			ui.HSLmenu->show();
+		}
+		else {
+			ui.HSLmenu->hide();
+		}
 		});
 }
 

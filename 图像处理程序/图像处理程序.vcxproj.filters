@@ -70,13 +70,22 @@
     <ClCompile Include="ToolFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Eraser.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="MyPaletteModel.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="MyPalette.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="MoveHand.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawToolUIFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="DrawToolsUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="PencilUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -99,13 +108,16 @@
     <ClInclude Include="ToolFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Eraser.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="MyPaletteModel.h">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="MyEvent.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="MoveHand.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="DrawToolUIFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
@@ -122,6 +134,12 @@
     <QtMoc Include="MyPalette.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="DrawToolsUI.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="PencilUI.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DrawCanvas.ui">
@@ -134,6 +152,12 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="MyPalette.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="DrawToolsUI.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="PencilUI.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

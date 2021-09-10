@@ -10,12 +10,14 @@ public:
 	void DeleteColor(int);//删除色板上指定位置的颜色
 	void SwapColor();//交换前后景色
 	void SetFrontColor(MyImage::RGBQUAD);
+	void SetBackColor(MyImage::RGBQUAD);
 	MyImage::RGBQUAD GetFrontColor();
 	MyImage::RGBQUAD GetBackColor();
 private:
 	MyPaletteModel();
 public:
 	MyEvent<MyPaletteModel, MyImage::RGBQUAD> FrontColorChange;
+	MyEvent<MyPaletteModel, MyImage::RGBQUAD> BackColorChange;
 private:
 	static MyPaletteModel* _instance;
 	QVector<MyImage::RGBQUAD> _colorBoard;//色板

@@ -36,6 +36,7 @@ public:
 	float GetScale();//获得缩放率
 
 	QPoint GetDrawPoint();//获得绘画起始点
+	void SetDrawPoint(QPoint);
 
 	void SaveImage(const QString&);// 储存文件
 
@@ -51,6 +52,7 @@ private:
 	void mouseMoveEvent(QMouseEvent*) override;//重写鼠标移动事件
 	void contextMenuEvent(QContextMenuEvent*) override;//重写菜单事件
 	void keyPressEvent(QKeyEvent* e) override; //重写按键事件
+	void wheelEvent(QWheelEvent* event) override;//滚轮事件
 
 	void resizeEvent(QResizeEvent*) override;//重写大小变化事件
 

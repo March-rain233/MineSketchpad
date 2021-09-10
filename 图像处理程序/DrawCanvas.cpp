@@ -8,8 +8,8 @@ DrawCanvas::DrawCanvas(QWidget* parent)
 	_tool = nullptr;
 	_ui.horizontalScrollBar->setRange(0, _ui.Image->width());
 	_ui.verticalScrollBar->setRange(0, _ui.Image->height());
-	connect(_ui.horizontalScrollBar, &QAbstractSlider::sliderMoved, this, &DrawCanvas::HorizontalMove);
-	connect(_ui.verticalScrollBar, &QAbstractSlider::sliderMoved, this, &DrawCanvas::VertiaclMove);
+	connect(_ui.horizontalScrollBar, &QAbstractSlider::valueChanged, this, &DrawCanvas::HorizontalMove);
+	connect(_ui.verticalScrollBar, &QAbstractSlider::valueChanged, this, &DrawCanvas::VertiaclMove);
 }
 
 DrawCanvas::~DrawCanvas() {
@@ -185,6 +185,17 @@ void DrawCanvas::keyPressEvent(QKeyEvent* e) {
 	QWidget::keyPressEvent(e);
 }
 
+void DrawCanvas::wheelEvent(QWheelEvent* event) {
+	int offestX = event->x() - _drawPoint.x();
+	int offestY = event->y() - _drawPoint.y();
+	float oldScale = GetScale();
+	SetScale(_scale + event->delta() * 0.02);
+	offestX *= (GetScale() / oldScale);
+	offestY *= (GetScale() / oldScale);
+	SetDrawPoint(QPoint(event->x() - offestX, event->y() - offestY));
+	update();
+}
+
 void DrawCanvas::resizeEvent(QResizeEvent* e) {
 	_ui.horizontalScrollBar->setRange(0, e->size().width());
 	_ui.verticalScrollBar->setRange(0, e->size().height());
@@ -208,6 +219,29 @@ void DrawCanvas::DrawImage() {
 		}
 	}
 	painter.end();
+}
+
+void DrawCanvas::SetDrawPoint(QPoint p) {
+	int x = p.x();
+	int y = p.y();
+	//¹ýÂËx
+	if (x + GetDrawWidth() / 2 < 0) {
+		x = -GetDrawWidth() / 2;
+	}
+	else if(x + GetDrawWidth() / 2 > _ui.Image->rect().width()){
+		x = _ui.Image->rect().width() - GetDrawWidth() / 2;
+	}
+	//¹ýÂËy
+	if (y + GetDrawHeight() / 2 < 0) {
+		y = -GetDrawHeight() / 2;
+	}
+	else if (y + GetDrawHeight() / 2 > _ui.Image->rect().height()) {
+		y = _ui.Image->rect().height() - GetDrawHeight() / 2;
+	}
+	_drawPoint.setX(x);
+	_drawPoint.setY(y);
+	_ui.horizontalScrollBar->setValue(_ui.Image->width() - _drawPoint.x() - GetDrawWidth() / 2);
+	_ui.verticalScrollBar->setValue(_ui.Image->height() - _drawPoint.y() - GetDrawHeight() / 2);
 }
 
 void DrawCanvas::HorizontalMove(int v) {

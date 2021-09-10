@@ -91,16 +91,21 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="Eraser.cpp" />
+    <ClCompile Include="DrawToolsUI.cpp" />
+    <ClCompile Include="DrawToolUIFactory.cpp" />
     <ClCompile Include="Mat.cpp" />
+    <ClCompile Include="MoveHand.cpp" />
     <ClCompile Include="MyPalette.cpp" />
     <ClCompile Include="MyPaletteModel.cpp" />
+    <ClCompile Include="PencilUI.cpp" />
     <ClCompile Include="ToolFactory.cpp" />
     <ClCompile Include="Tools.cpp" />
     <QtRcc Include="PhotoshopLike.qrc" />
     <QtUic Include="CreateImage.ui" />
     <QtUic Include="DrawCanvas.ui" />
+    <QtUic Include="DrawToolsUI.ui" />
     <QtUic Include="MyPalette.ui" />
+    <QtUic Include="PencilUI.ui" />
     <QtUic Include="PhotoshopLike.ui" />
     <QtMoc Include="PhotoshopLike.h" />
     <ClCompile Include="CreateImage.cpp" />
@@ -114,11 +119,14 @@
     <QtUic Include="Tools.ui" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Eraser.h" />
+    <QtMoc Include="DrawToolsUI.h" />
+    <ClInclude Include="DrawToolUIFactory.h" />
     <QtMoc Include="MyPalette.h" />
+    <ClInclude Include="MoveHand.h" />
     <ClInclude Include="MyEvent.h" />
     <ClInclude Include="MyPaletteModel.h" />
     <ClInclude Include="Pencil.h" />
+    <QtMoc Include="PencilUI.h" />
     <ClInclude Include="ToolFactory.h" />
     <QtMoc Include="Tools.h" />
     <QtMoc Include="DrawCanvas.h" />
