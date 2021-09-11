@@ -5,6 +5,7 @@
 #include "CreateImage.h"
 #include <qstandardpaths.h>
 #include <QTextCodec>
+#include "LayerModel.h"
 
 PhotoshopLike::PhotoshopLike(QWidget* parent)
 	: QMainWindow(parent) {
@@ -42,19 +43,22 @@ void PhotoshopLike::OpenImage() {
 	ui.widget->ClearCanvas();
 	//Todo:这里会内存泄露
 	MyImage::Image* m = MyImage::Image::ReadImage(name.c_str());
-	ui.widget->AddLayer(*m);
-	delete m;
+	ui.widget->SetBackground(MyImage::BitMap_32(m->GetHeight(), m->GetWidth(), MyImage::RGBQUAD{ 0,0,0,0 }));
+	ui.widget->AddLayer(new LayerModel(m));
 }
 
 void PhotoshopLike::CreateNewImage() {
 	CreateImage dialog;
 	if (dialog.exec() == QDialog::Accepted) {
+		ui.widget->ClearCanvas();
 		_fileName = dialog.GetFilename();
 		QColor color = dialog.GetColor();
 		MyImage::RGBQUAD rgb
 		{ color.blue(), color.green(), color.red(), color.alpha() };
 		MyImage::BitMap_32 t(dialog.GetHeight(), dialog.GetWidth(), rgb);
-		ui.widget->AddLayer(t);
+		ui.widget->SetBackground(t);
+		ui.widget->AddLayer(new LayerModel(new MyImage::BitMap_32
+		(dialog.GetHeight(), dialog.GetWidth(), MyImage::RGBQUAD{0,0,0,0})));
 	}
 }
 

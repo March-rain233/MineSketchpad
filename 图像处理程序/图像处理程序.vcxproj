@@ -93,10 +93,14 @@
   <ItemGroup>
     <ClCompile Include="DrawToolsUI.cpp" />
     <ClCompile Include="DrawToolUIFactory.cpp" />
+    <ClCompile Include="LayerGroup.cpp" />
+    <ClCompile Include="LayerModel.cpp" />
+    <ClCompile Include="LayerUI.cpp" />
     <ClCompile Include="Mat.cpp" />
     <ClCompile Include="MoveHand.cpp" />
     <ClCompile Include="MyPalette.cpp" />
     <ClCompile Include="MyPaletteModel.cpp" />
+    <ClCompile Include="OverlayFunctionFactory.cpp" />
     <ClCompile Include="PencilUI.cpp" />
     <ClCompile Include="ToolFactory.cpp" />
     <ClCompile Include="Tools.cpp" />
@@ -104,6 +108,8 @@
     <QtUic Include="CreateImage.ui" />
     <QtUic Include="DrawCanvas.ui" />
     <QtUic Include="DrawToolsUI.ui" />
+    <QtUic Include="LayerGroup.ui" />
+    <QtUic Include="LayerUI.ui" />
     <QtUic Include="MyPalette.ui" />
     <QtUic Include="PencilUI.ui" />
     <QtUic Include="PhotoshopLike.ui" />
@@ -122,9 +128,14 @@
     <QtMoc Include="DrawToolsUI.h" />
     <ClInclude Include="DrawToolUIFactory.h" />
     <QtMoc Include="MyPalette.h" />
+    <QtMoc Include="LayerGroup.h" />
+    <ClInclude Include="LayerModel.h" />
+    <QtMoc Include="LayerUI.h" />
     <ClInclude Include="MoveHand.h" />
     <ClInclude Include="MyEvent.h" />
     <ClInclude Include="MyPaletteModel.h" />
+    <ClInclude Include="OverlayFunction.h" />
+    <ClInclude Include="OverlayFunctionFactory.h" />
     <ClInclude Include="Pencil.h" />
     <QtMoc Include="PencilUI.h" />
     <ClInclude Include="ToolFactory.h" />

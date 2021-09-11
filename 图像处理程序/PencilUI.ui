@@ -55,7 +55,11 @@
       </widget>
      </item>
      <item>
-      <widget class="QSpinBox" name="alphaInput"/>
+      <widget class="QSpinBox" name="alphaInput">
+       <property name="maximum">
+        <number>255</number>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>

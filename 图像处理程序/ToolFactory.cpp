@@ -2,6 +2,7 @@
 #include "Pencil.h"
 #include "MoveHand.h"
 #include "MyPaletteModel.h"
+#include "OverlayFunction.h"
 
 ToolFactory* ToolFactory::_instance = nullptr;
 
@@ -36,18 +37,7 @@ DrawTools* ToolFactory::Create(QString name) {
 		p->GetColor = [] {
 			return MyPaletteModel::GetInstance().GetFrontColor();
 		};
-		p->OverplayMode = [](MyImage::RGBQUAD input, MyImage::RGBQUAD old)->MyImage::RGBQUAD {
-			MyImage::RGBQUAD res;
-			res.rgbRed = input.rgbRed * input.rgbReserved / 255.0 +
-				old.rgbRed * (255 - old.rgbReserved) / 255.0;
-			res.rgbGreen = input.rgbGreen * input.rgbReserved / 255.0 +
-				old.rgbGreen * (255 - old.rgbReserved) / 255.0;
-			res.rgbBlue = input.rgbBlue * input.rgbReserved / 255.0 +
-				old.rgbBlue * (255 - old.rgbReserved) / 255.0;
-			res.rgbReserved = input.rgbReserved * input.rgbReserved / 255.0 +
-				old.rgbReserved * (255 - old.rgbReserved) / 255.0;
-			return res;
-		};
+		p->OverlayMode = NormalOverlay;
 		res = p;
 	}
 	else if (name == "Eraser") {
@@ -57,8 +47,12 @@ DrawTools* ToolFactory::Create(QString name) {
 		p->GetColor = [] {
 			return MyImage::RGBQUAD{ 0,0,0,0 };
 		};
-		p->OverplayMode = [](MyImage::RGBQUAD input, MyImage::RGBQUAD old)->MyImage::RGBQUAD {
-			return input;
+		p->OverlayMode = [](MyImage::RGBQUAD input, MyImage::RGBQUAD old)->MyImage::RGBQUAD {
+			old.rgbReserved -= input.rgbReserved;
+			if (old.rgbReserved < 0) {
+				old.rgbReserved = 0;
+			}
+			return old;
 		};
 		res = p;
 	}

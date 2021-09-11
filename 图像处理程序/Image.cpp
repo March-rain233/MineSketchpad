@@ -1,5 +1,6 @@
 #include"Image.h"
 #include<fstream>
+#include<qdebug>
 using namespace MyImage;
 
 const Image& MyImage::Image::ToGrayScale() {
@@ -59,11 +60,23 @@ MyImage::BitMap_32::BitMap_32(int h, int w) {
 }
 
 MyImage::BitMap_32::BitMap_32(const RGBQUAD* m, int h, int w) {
-	_data = new Mat<RGBQUAD>(m, h, w);
+	_data = new Mat<RGBQUAD>(h, w);
+	memcpy(_data->GetBits(), m, h * w * 4);
 }
 
 MyImage::BitMap_32::BitMap_32(int h, int w, const RGBQUAD& v) {
-	_data = new Mat<RGBQUAD>(h, w, v);
+	_data = new Mat<RGBQUAD>(h, w);
+	memset(_data->GetBits(), *reinterpret_cast<const int*>(&v), h * w * 4);
+}
+
+MyImage::BitMap_32::BitMap_32(const BitMap_32& res) {
+	_data = new Mat<RGBQUAD>(res.GetHeight(), res.GetWidth());
+	memcpy(_data->GetBits(), res.GetBits(), res.GetHeight() * res.GetWidth() * 4);
+}
+
+MyImage::BitMap_32::~BitMap_32() {
+	qDebug() << "µ÷ÓÃÎö¹¹";
+	delete _data;
 }
 
 void MyImage::BitMap_32::WriteImage(const char* filename) const {
@@ -106,12 +119,22 @@ void MyImage::BitMap_32::WriteImage(const char* filename) const {
 	bmp.close();
 }
 
-RGBQUAD MyImage::BitMap_32::GetPixel(int col, int row) const {
+const RGBQUAD& MyImage::BitMap_32::GetPixel(int col, int row) const {
 	return _data->At(col, row);
 }
 
-void MyImage::BitMap_32::SetPixel(int col, int row, RGBQUAD val) {
-	_data->Set(col, row, val);
+const RGBQUAD& MyImage::BitMap_32::GetPixel(int i) const {
+	return _data->At(i);
+}
+
+void MyImage::BitMap_32::SetPixel(int col, int row, const RGBQUAD& val) {
+	memcpy(&_data->At(col, row), &val, 4);
+	InvokePixelChanged(row * _data->Width() + col);
+}
+
+void MyImage::BitMap_32::SetPixel(int i, const RGBQUAD& val) {
+	memcpy(&_data->At(i), &val, 4);
+	InvokePixelChanged(i);
 }
 
 void MyImage::BitMap_32::Resize(int h, int w) {
@@ -160,7 +183,7 @@ int MyImage::BitMap_32::GetWidth() const {
 	return _data->Width();
 }
 
-const RGBQUAD* MyImage::BitMap_32::GetBits() const {
+RGBQUAD* MyImage::BitMap_32::GetBits() const {
 	return _data->GetBits();
 }
 

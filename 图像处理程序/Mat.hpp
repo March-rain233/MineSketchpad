@@ -34,6 +34,7 @@ public:
     const T& At(int n) const; //获取第n位
     
     void Set(int row, int col, T value); //设置元素(row,col)为某值;
+    void Set(int i, T val);
     void Set(T value); //设置所有元素为同一值;
 
     void Flip(int code); //翻转; 根据code的值：0:左右翻转，1:上下翻转;
@@ -311,6 +312,11 @@ inline const T& Mat<T, compare>::At(int n) const {
 template<typename T, typename compare>
 inline void Mat<T, compare>::Set(int row, int col, T value) {
     _data[row * _width + col] = value;
+}
+
+template<typename T, typename compare>
+inline void Mat<T, compare>::Set(int i, T val) {
+    _data[i] = val;
 }
 
 template<typename T, typename compare>

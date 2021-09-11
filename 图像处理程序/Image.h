@@ -1,6 +1,7 @@
 #pragma once
 #include<qimage.h>
 #include"Mat.hpp"
+#include"MyEvent.h"
 namespace MyImage {
 #pragma pack(push,1)
 	struct BITMAPFILEHEADER {
@@ -38,10 +39,13 @@ namespace MyImage {
 
 	class Image{
 	public:
+		virtual ~Image() {}
 		static Image* ReadImage(const char*);//读取图片
 		virtual void WriteImage(const char*) const = 0;//储存图片
-		virtual RGBQUAD GetPixel(int, int) const = 0;//获取像素
-		virtual void SetPixel(int, int, RGBQUAD) = 0;//设置像素
+		virtual const RGBQUAD& GetPixel(int, int) const = 0;//获取像素
+		virtual const RGBQUAD& GetPixel(int) const = 0;//获取像素
+		virtual void SetPixel(int, int, const RGBQUAD&) = 0;//设置像素
+		virtual void SetPixel(int, const RGBQUAD&) = 0;//设置像素
 		virtual int GetHeight() const = 0;//图像高度
 		virtual int GetWidth() const = 0;//图像长度
 		virtual void Resize(int, int) = 0;//放大缩小
@@ -52,9 +56,15 @@ namespace MyImage {
 		virtual void Cat(Image& m, int code) = 0; // 将m与当前对象进行拼接，code代表拼接的方式
 		virtual Image* Clone() const = 0; // 从当前对象拷贝创建一个新的矩阵，完成深拷贝
 		virtual QImage ToQImage() const = 0;//转换为QImage
-		virtual const RGBQUAD* GetBits() const = 0;//获取一维像素数组
+		virtual RGBQUAD* GetBits() const = 0;//获取一维像素数组
 		virtual Image& operator=(const Image&) = 0;//深拷贝
 		virtual const Image& ToGrayScale();
+	protected:
+		void InvokePixelChanged(int v) {
+			PixelChanged(v);
+		}
+	public:
+		MyEvent<Image, int> PixelChanged;
 	};
 
 	class BitMap_32 : public Image {
@@ -62,10 +72,14 @@ namespace MyImage {
 		BitMap_32(int, int);
 		BitMap_32(const RGBQUAD*, int, int);
 		BitMap_32(int, int, const RGBQUAD&);
+		BitMap_32(const BitMap_32&);
+		~BitMap_32();
 		// 通过 Image 继承
 		virtual void WriteImage(const char*) const override;
-		virtual RGBQUAD GetPixel(int, int) const override;
-		virtual void SetPixel(int, int, RGBQUAD) override;
+		virtual const RGBQUAD& GetPixel(int, int) const override;
+		virtual const RGBQUAD& GetPixel(int) const override;
+		virtual void SetPixel(int, int, const RGBQUAD&) override;
+		virtual void SetPixel(int, const RGBQUAD&) override;
 		virtual void Resize(int, int) override;
 		virtual void Crop(int x1, int y1, int x2, int y2) override;
 		virtual void Rotate(int degree) override;
@@ -83,7 +97,7 @@ namespace MyImage {
 		virtual int GetWidth() const override;
 
 		// 通过 Image 继承
-		virtual const RGBQUAD* GetBits() const override;
+		virtual RGBQUAD* GetBits() const override;
 
 	};
 }

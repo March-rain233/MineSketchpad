@@ -61,9 +61,21 @@ QPoint Pencil::TransformPoint(QPoint p, DrawCanvas* canvas) {
 void Pencil::FillRow(int x1, int x2, int y, MyImage::RGBQUAD v) {
     DrawCanvas& device = GetDevice();
     int layer = device.GetSelected()[0];
+    if (y < 0 || y >= device.GetImageHeight()) {
+        return;
+    }
+    if (x1 > x2) {
+        std::swap(x1, x2);
+    }
+    if (x1 < 0) {
+        x1 = 0;
+    }
+    if (x2 >= device.GetImageWidth()) {
+        x2 = device.GetImageHeight() - 1;
+    }
     for (int i = x1; i <= x2; ++i) {
         _command->SetPixel(layer, y, i, 
-            OverplayMode(v,device.GetLayers()[layer]->GetPixel(i,y)));
+            OverlayMode(v,device.GetLayers()[layer]->GetImage().GetPixel(i,y)));
     }
 }
 
@@ -75,6 +87,7 @@ void Pencil::DrawPoint(QPoint p, int layer) {
     int y = p.y();
 
     auto color = GetColor();
+    color.rgbReserved = _alpha;
     for (i = 0; i <= xymax; i++)//±éÀúxÖá£¬45¡ã~90¡ãÇøÓò
     {
         j = 0;

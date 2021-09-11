@@ -1,15 +1,17 @@
 #include "DrawCanvas.h"
+#include <qdebug.h>
 
 DrawCanvas::DrawCanvas(QWidget* parent)
 	: QWidget(parent), _drawPoint(0, 0) {
 	_ui.setupUi(this);
 	_ui.Image->installEventFilter(this);
-	_canvasFill = new QImage(50, 50, QImage::Format_RGBA8888);
 	_tool = nullptr;
-	_ui.horizontalScrollBar->setRange(0, _ui.Image->width());
-	_ui.verticalScrollBar->setRange(0, _ui.Image->height());
+	_canvasFill = nullptr;
+	_ui.horizontalScrollBar->setRange(0, 0);
+	_ui.verticalScrollBar->setRange(0, 0);
 	connect(_ui.horizontalScrollBar, &QAbstractSlider::valueChanged, this, &DrawCanvas::HorizontalMove);
 	connect(_ui.verticalScrollBar, &QAbstractSlider::valueChanged, this, &DrawCanvas::VertiaclMove);
+
 }
 
 DrawCanvas::~DrawCanvas() {
@@ -51,36 +53,48 @@ void DrawCanvas::ClearRedoCommand() {
 	_redoCommand.clear();
 }
 
-void DrawCanvas::AddLayer(const MyImage::Image& im) {
+void DrawCanvas::AddLayer(LayerModel* layer) {
 	if (_layers.size() == 0) {
-		int picMax = im.GetWidth() > im.GetHeight() ? im.GetWidth() : im.GetHeight();
+		int picMax = layer->GetImage().GetWidth() > layer->GetImage().GetHeight() ?
+			layer->GetImage().GetWidth() : layer->GetImage().GetHeight();
 		int labMac = _ui.Image->height() > _ui.Image->width() ? _ui.Image->height() : _ui.Image->width();
 		_scale = labMac * 100.0f / picMax;
+		_ui.horizontalScrollBar->setRange(0, 2 * GetDrawWidth());
+		_ui.verticalScrollBar->setRange(0, 2 * GetDrawHeight());
 	}
-	_layers.push_back(im.Clone());
+	layer->GetImage().PixelChanged += [this](int i) {
+		ReDraw(i);
+	};
+	_layers.push_back(layer);
 	_seletcted.clear();
 	_seletcted.push_back(_layers.size() - 1);
+	ReDraw();
 	update();
 }
 
-void DrawCanvas::InsertLayer(const MyImage::Image& im, int i) {
+void DrawCanvas::InsertLayer(LayerModel* layer, int i) {
 	if (i == 0) {
-		AddLayer(im);
+		AddLayer(layer);
 		return;
 	}
-	_layers.insert(i, im.Clone());
+	layer->GetImage().PixelChanged += [this](int i) {
+		ReDraw(i);
+	};
+	_layers.insert(i, layer);
 	_seletcted.clear();
 	_seletcted.push_back(i);
+	ReDraw();
 	update();
 }
 
 void DrawCanvas::DeleteLayer(int i) {
 	delete _layers[i];
 	_layers.remove(i);
+	ReDraw();
 	update();
 }
 
-const QVector<MyImage::Image*>& DrawCanvas::GetLayers() {
+const QVector<LayerModel*>& DrawCanvas::GetLayers() {
 	return _layers;
 }
 
@@ -108,17 +122,16 @@ QPoint DrawCanvas::GetDrawPoint() {
 }
 
 void DrawCanvas::SaveImage(const QString& fileName) {
-	int h = _layers[0]->GetHeight();
-	int w = _layers[0]->GetWidth();
-	MyImage::BitMap_32 res(h, w);
-	for (int i = 0; i < h; ++i) {
-		for (int j = 0; j < w; ++j) {
-			for (int k = 0; k < _layers.size(); ++k) {
-				res.SetPixel(i, j, _layers[k]->GetPixel(i, j));
-			}
+	int h = _canvasFill->GetHeight();
+	int w = _canvasFill->GetWidth();
+	MyImage::Image* res = _canvasFill->Clone();
+	for (int i = 0; i < _layers.count(); ++i) {
+		if (_layers[i]->IsVisible()) {
+			_layers[i]->PaintEvent(*res);
 		}
 	}
-	res.WriteImage(fileName.toLatin1().data());
+	res->WriteImage(fileName.toLatin1().data());
+	delete res;
 }
 
 void DrawCanvas::PushCommand(DrawCommand* c) {
@@ -134,6 +147,16 @@ void DrawCanvas::SetTool(DrawTools* t) {
 	_tool->Rigister(this);
 }
 
+void DrawCanvas::SetBackground(const MyImage::Image& im) {
+	if (_canvasFill != nullptr) {
+		delete _canvasFill;
+		delete _canvas;
+	}
+	_canvasFill = new MyImage::BitMap_32(im.GetBits(), im.GetHeight(), im.GetWidth());
+	_canvas = new MyImage::BitMap_32(im.GetHeight(), im.GetWidth());
+	ReDraw();
+}
+
 void DrawCanvas::ClearCanvas() {
 	ClearCommand();
 	for (int i = 0; i < _layers.size(); ++i) {
@@ -145,6 +168,39 @@ void DrawCanvas::ClearCanvas() {
 
 bool DrawCanvas::IsEmpty() {
 	return _layers.isEmpty();
+}
+
+void DrawCanvas::ReDraw() {
+	memcpy(_canvas->GetBits(), _canvasFill->GetBits(),
+		_canvas->GetWidth() * _canvas->GetHeight() * 4);
+	int num = _layers.count();
+	for (int i = 0; i < num; ++i) {
+		if (_layers[i]->IsVisible()) {
+			_layers[i]->PaintEvent(*_canvas);
+		}
+	}
+}
+
+void DrawCanvas::ReDraw(int i) {
+	_canvas->SetPixel(i, _canvasFill->GetPixel(i));
+	//qDebug() << "原先" << _canvas->GetPixel(i).rgbRed << " " << _canvas->GetPixel(i).rgbGreen << " " << _canvas->GetPixel(i).rgbBlue << " " << _canvas->GetPixel(i).rgbReserved;
+	int num = _layers.count();
+	for (int j = 0; j < num; ++j) {
+		if (_layers[j]->IsVisible()) {
+			_layers[j]->PaintEvent(i, *_canvas);
+		}
+	}
+	//qDebug() << "后来" << _canvas->GetPixel(i).rgbRed << " " << _canvas->GetPixel(i).rgbGreen << " " << _canvas->GetPixel(i).rgbBlue << " " << _canvas->GetPixel(i).rgbReserved;
+}
+
+void DrawCanvas::ReDraw(int, int) {}
+
+int DrawCanvas::GetImageHeight() {
+	return _canvasFill->GetHeight();
+}
+
+int DrawCanvas::GetImageWidth() {
+	return _canvasFill->GetWidth();
 }
 
 void DrawCanvas::mousePressEvent(QMouseEvent* e) {
@@ -189,7 +245,7 @@ void DrawCanvas::wheelEvent(QWheelEvent* event) {
 	int offestX = event->x() - _drawPoint.x();
 	int offestY = event->y() - _drawPoint.y();
 	float oldScale = GetScale();
-	SetScale(_scale + event->delta() * 0.02);
+	SetScale(_scale + event->delta() * 0.03);
 	offestX *= (GetScale() / oldScale);
 	offestY *= (GetScale() / oldScale);
 	SetDrawPoint(QPoint(event->x() - offestX, event->y() - offestY));
@@ -197,8 +253,10 @@ void DrawCanvas::wheelEvent(QWheelEvent* event) {
 }
 
 void DrawCanvas::resizeEvent(QResizeEvent* e) {
-	_ui.horizontalScrollBar->setRange(0, e->size().width());
-	_ui.verticalScrollBar->setRange(0, e->size().height());
+	if (!IsEmpty()) {
+		_ui.horizontalScrollBar->setRange(0, 2 * GetDrawWidth());
+		_ui.verticalScrollBar->setRange(0, 2 * GetDrawHeight());
+	}
 	QWidget::resizeEvent(e);
 }
 
@@ -210,68 +268,73 @@ bool DrawCanvas::eventFilter(QObject* watched, QEvent* event) {
 }
 
 void DrawCanvas::DrawImage() {
-	QPainter painter;
-	painter.begin(_ui.Image);
-	//painter.drawImage(_ui.Image->rect(), *_canvasFill);
 	if (!_layers.isEmpty()) {
-		for (int i = 0; i < _layers.count(); ++i) {
-			painter.drawImage(GetDrawRect(), _layers[i]->ToQImage());
-		}
+		QPainter painter;
+		painter.begin(_ui.Image);
+		painter.drawImage(GetDrawRect(), _canvas->ToQImage());
+		painter.end();
 	}
-	painter.end();
 }
 
 void DrawCanvas::SetDrawPoint(QPoint p) {
 	int x = p.x();
 	int y = p.y();
+	int w = _ui.Image->rect().width();
+	int h = _ui.Image->rect().height();
 	//过滤x
-	if (x + GetDrawWidth() / 2 < 0) {
-		x = -GetDrawWidth() / 2;
+	if (x + GetDrawWidth() -  w / 2 < 0) {
+		x = -GetDrawWidth() + w / 2;
 	}
-	else if(x + GetDrawWidth() / 2 > _ui.Image->rect().width()){
-		x = _ui.Image->rect().width() - GetDrawWidth() / 2;
+	else if (x > w / 2) {
+		x = w / 2;
 	}
 	//过滤y
-	if (y + GetDrawHeight() / 2 < 0) {
-		y = -GetDrawHeight() / 2;
+	if (y + GetDrawHeight() - h / 2 < 0) {
+		y = -GetDrawHeight() + h / 2;
 	}
-	else if (y + GetDrawHeight() / 2 > _ui.Image->rect().height()) {
-		y = _ui.Image->rect().height() - GetDrawHeight() / 2;
+	else if (y > h / 2) {
+		y = h / 2;
 	}
 	_drawPoint.setX(x);
 	_drawPoint.setY(y);
-	_ui.horizontalScrollBar->setValue(_ui.Image->width() - _drawPoint.x() - GetDrawWidth() / 2);
-	_ui.verticalScrollBar->setValue(_ui.Image->height() - _drawPoint.y() - GetDrawHeight() / 2);
+
+	_ui.horizontalScrollBar->blockSignals(true);
+	_ui.verticalScrollBar->blockSignals(true);
+	_ui.horizontalScrollBar->setValue(_ui.Image->width() / 2 - x);
+	_ui.verticalScrollBar->setValue(_ui.Image->height() / 2 - y);
+	_ui.verticalScrollBar->blockSignals(false);
+	_ui.horizontalScrollBar->blockSignals(false);
+	update();
 }
 
 void DrawCanvas::HorizontalMove(int v) {
-	if (_layers.isEmpty()) {
+	if (IsEmpty()) {
 		return;
 	}
-	_drawPoint.setX(_ui.Image->width() - v - GetDrawWidth() / 2);
+	_drawPoint.setX(_ui.Image->width() / 2 - v);
 	update();
 }
 
 void DrawCanvas::VertiaclMove(int v) {
-	if (_layers.isEmpty()) {
+	if (IsEmpty()) {
 		return;
 	}
-	_drawPoint.setY(_ui.Image->height() - v - GetDrawHeight() / 2);
+	_drawPoint.setY(_ui.Image->height() / 2 - v);
 	update();
 }
 
 int DrawCanvas::GetDrawHeight() {
-	return _layers[0]->GetHeight() * _scale * 0.01;
+	return _canvasFill->GetHeight() * _scale * 0.01;
 }
 
 int DrawCanvas::GetDrawWidth() {
-	return _layers[0]->GetWidth()* _scale * 0.01;
+	return _canvasFill->GetWidth()* _scale * 0.01;
 }
 
 QRect DrawCanvas::GetDrawRect() {
 	QRect res;
 	res.setTopLeft(_drawPoint);
-	res.setHeight(_layers[0]->GetHeight() * _scale * 0.01);
-	res.setWidth(_layers[0]->GetWidth() * _scale * 0.01);
+	res.setHeight(_canvasFill->GetHeight() * _scale * 0.01);
+	res.setWidth(_canvasFill->GetWidth() * _scale * 0.01);
 	return res;
 }

@@ -88,6 +88,18 @@
     <ClCompile Include="PencilUI.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="LayerGroup.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LayerModel.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="OverlayFunctionFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="LayerUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawCommand.h">
@@ -120,6 +132,15 @@
     <ClInclude Include="DrawToolUIFactory.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="LayerModel.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OverlayFunction.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="OverlayFunctionFactory.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="DrawCanvas.h">
@@ -140,6 +161,12 @@
     <QtMoc Include="PencilUI.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="LayerGroup.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="LayerUI.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DrawCanvas.ui">
@@ -158,6 +185,12 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="PencilUI.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="LayerGroup.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="LayerUI.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

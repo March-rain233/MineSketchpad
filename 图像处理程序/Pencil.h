@@ -22,7 +22,7 @@ public:
 	MyEvent<Pencil, unsigned char> AlphaChanged;
 
 	std::function<MyImage::RGBQUAD(void)> GetColor;
-	std::function<MyImage::RGBQUAD(MyImage::RGBQUAD, MyImage::RGBQUAD)> OverplayMode;
+	std::function<MyImage::RGBQUAD(MyImage::RGBQUAD, MyImage::RGBQUAD)> OverlayMode;
 private:
 	QPoint TransformPoint(QPoint, DrawCanvas*);//将画布坐标转换为图像坐标
 	void FillRow(int, int, int, MyImage::RGBQUAD);//填充一行像素

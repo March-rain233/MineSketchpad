@@ -80,6 +80,7 @@ void Tools::SetTool(QString name) {
 		ui.toolMenu->hide();
 	}
 	ui.toolMenu = DrawToolUIFactory::GetInstance().Create(name, ui.widget);
+	ui.widget->layout()->addWidget(ui.toolMenu);
 	ui.toolMenu->show();
 	_device->SetTool(&ui.toolMenu->GetTool());
 	ui.verticalScrollBar->setRange(0, ui.body->rect().height());

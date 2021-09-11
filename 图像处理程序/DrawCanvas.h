@@ -8,6 +8,7 @@
 #include "DrawCommand.h"
 #include "Image.h"
 #include "DrawTools.h"
+#include "LayerModel.h"
 
 class DrawTools;
 
@@ -26,10 +27,10 @@ public:
 	void ClearCommand();//清除操作记录
 	void ClearRedoCommand();//清除可以重做的操作记录
 
-	void AddLayer(const MyImage::Image&);//增加图层
-	void InsertLayer(const MyImage::Image&, int);//在指定位置插入图层
+	void AddLayer(LayerModel*);//增加图层
+	void InsertLayer(LayerModel*, int);//在指定位置插入图层
 	void DeleteLayer(int);//删除指定图层
-	const QVector<MyImage::Image*>& GetLayers();//获取图层组
+	const QVector<LayerModel*>& GetLayers();//获取图层组
 	QVector<int>& GetSelected();//获取当前选中的图层索引
 
 	void SetScale(float);//设置缩放率
@@ -44,8 +45,17 @@ public:
 
 	void SetTool(DrawTools*);//设置绘画工具
 
+	void SetBackground(const MyImage::Image&);//设置背景
+
 	void ClearCanvas();//清除画板
 	bool IsEmpty();//是否在工作
+
+	void ReDraw();//重新完全绘制画布
+	void ReDraw(int);//重绘一维数组i处点
+	void ReDraw(int, int);//重绘i,j处点
+
+	int GetImageHeight();//获取图片的实际高度
+	int GetImageWidth();//获取图片的实际宽度
 private:
 	void mousePressEvent(QMouseEvent*) override;//重写鼠标按下事件
 	void mouseReleaseEvent(QMouseEvent*) override;//重写鼠标释放事件
@@ -72,12 +82,14 @@ private:
 	QStack<DrawCommand*> _historyCommand;//历史命令
 	QStack<DrawCommand*> _redoCommand;//可以重做的操作
 
-	QVector<MyImage::Image*> _layers;//图层
+	QVector<LayerModel*> _layers;//图层
 
 	DrawTools* _tool;//当前使用的绘图工具
 
 	QPoint _drawPoint;//渲染起点（左上角）
-	QImage* _canvasFill;//画布背景填充
+	MyImage::Image* _canvasFill;//画布背景填充
+	MyImage::Image* _canvas;//画布
+
 	const float _maxSizeRate = 3200;//最大画面放大率
 	const float _minSizeRate = 1;//最大画面缩小率
 	float _scale = 1;//当前缩放率
