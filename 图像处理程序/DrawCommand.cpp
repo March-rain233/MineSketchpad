@@ -29,11 +29,11 @@ void PaintCommand::SetPixel(int layer, int i, int j, MyImage::RGBQUAD color) {
 	}
 
 	MyImage::RGBQUAD t = _target[layer]->GetImage().GetPixel(i, j);
-	if (t.rgbBlue == color.rgbBlue && t.rgbGreen == color.rgbGreen &&
-		t.rgbRed == color.rgbRed && t.rgbReserved == color.rgbReserved)
+	if (memcmp(&color, &t, 4) == 0)
 	{
 		return;
 	}
+
 	PixelInfo* temp = new PixelInfo();
 	temp->Layer = layer;
 	temp->I = i;

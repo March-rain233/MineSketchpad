@@ -122,16 +122,8 @@ QPoint DrawCanvas::GetDrawPoint() {
 }
 
 void DrawCanvas::SaveImage(const QString& fileName) {
-	int h = _canvasFill->GetHeight();
-	int w = _canvasFill->GetWidth();
-	MyImage::Image* res = _canvasFill->Clone();
-	for (int i = 0; i < _layers.count(); ++i) {
-		if (_layers[i]->IsVisible()) {
-			_layers[i]->PaintEvent(*res);
-		}
-	}
-	res->WriteImage(fileName.toLatin1().data());
-	delete res;
+	ReDraw();
+	_canvas->WriteImage(fileName.toLatin1().data());
 }
 
 void DrawCanvas::PushCommand(DrawCommand* c) {

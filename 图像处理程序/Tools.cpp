@@ -47,6 +47,9 @@ Tools::Tools(QWidget *parent)
 		ui.background->setIcon(createColorIcon(QColor(v.rgbRed, v.rgbGreen, v.rgbBlue), ui.front->iconSize()));
 	};
 
+	instance.SetFrontColor(instance.GetFrontColor());
+	instance.SetBackColor(instance.GetBackColor());
+
 	//绑定工具按钮
 	auto buttons = ui.frame->findChildren<QAbstractButton *>();
 	QButtonGroup* pButtonGroup = new QButtonGroup(this);

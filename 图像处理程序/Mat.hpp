@@ -28,12 +28,12 @@ public:
     T Max(); //得到矩阵元素的最大值
     T Max() const; //得到矩阵元素的最大值
 
-    T& At(int row, int col);          //获取某点的值
+    T& At(int col, int row);          //获取某点的值
     T& At(int n); //获取第n位的值
-    const T& At(int row, int col) const;  //获取某点的值，const重载
+    const T& At(int col, int row) const;  //获取某点的值，const重载
     const T& At(int n) const; //获取第n位
     
-    void Set(int row, int col, T value); //设置元素(row,col)为某值;
+    void Set(int col, int row, T value); //设置元素(row,col)为某值;
     void Set(int i, T val);
     void Set(T value); //设置所有元素为同一值;
 
@@ -139,9 +139,9 @@ public:
             for (int j = 0; j < m2.Width(); ++j) {
                 T temp = 0;
                 for (int k = 0; k < m1.Width(); ++k) {
-                    temp += m1.At(i, k) * m2.At(k, j);
+                    temp += m1.At(k, i) * m2.At(j, k);
                 }
-                res.Set(i, j, temp);
+                res.Set(j, i, temp);
             }
         }
         return res;
@@ -290,7 +290,7 @@ inline T Mat<T, compare>::Max() const {
 }
 
 template<typename T, typename compare>
-inline T& Mat<T, compare>::At(int row, int col) {
+inline T& Mat<T, compare>::At(int col, int row) {
     return _data[row * _width + col];
 }
 
@@ -300,7 +300,7 @@ inline T& Mat<T, compare>::At(int n) {
 }
 
 template<typename T, typename compare>
-inline const T& Mat<T, compare>::At(int row, int col) const {
+inline const T& Mat<T, compare>::At(int col, int row) const {
     return _data[row * _width + col];
 }
 
@@ -310,7 +310,7 @@ inline const T& Mat<T, compare>::At(int n) const {
 }
 
 template<typename T, typename compare>
-inline void Mat<T, compare>::Set(int row, int col, T value) {
+inline void Mat<T, compare>::Set(int col, int row, T value) {
     _data[row * _width + col] = value;
 }
 

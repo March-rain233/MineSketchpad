@@ -25,6 +25,7 @@ PhotoshopLike::PhotoshopLike(QWidget* parent)
 	connect(ui.saveAs, &QAction::triggered, this, &PhotoshopLike::SaveNewImage);
 
 	ui.Tool->Rigister(ui.widget);
+	ui.layerGroup->Rigister(ui.widget);
 }
 
 void PhotoshopLike::OpenImage() {
@@ -40,24 +41,24 @@ void PhotoshopLike::OpenImage() {
 	QTextCodec* code = QTextCodec::codecForName("GB2312");//解决中文路径问题
 	std::string name = code->fromUnicode(OpenFile).data();
 	_fileName = QString(name.c_str());
-	ui.widget->ClearCanvas();
+	ui.layerGroup->ClearAllUI();
 	//Todo:这里会内存泄露
 	MyImage::Image* m = MyImage::Image::ReadImage(name.c_str());
 	ui.widget->SetBackground(MyImage::BitMap_32(m->GetHeight(), m->GetWidth(), MyImage::RGBQUAD{ 0,0,0,0 }));
-	ui.widget->AddLayer(new LayerModel(m));
+	ui.layerGroup->AddLayer(new LayerModel(m));
 }
 
 void PhotoshopLike::CreateNewImage() {
 	CreateImage dialog;
 	if (dialog.exec() == QDialog::Accepted) {
-		ui.widget->ClearCanvas();
+		ui.layerGroup->ClearAllUI();
 		_fileName = dialog.GetFilename();
 		QColor color = dialog.GetColor();
 		MyImage::RGBQUAD rgb
 		{ color.blue(), color.green(), color.red(), color.alpha() };
 		MyImage::BitMap_32 t(dialog.GetHeight(), dialog.GetWidth(), rgb);
 		ui.widget->SetBackground(t);
-		ui.widget->AddLayer(new LayerModel(new MyImage::BitMap_32
+		ui.layerGroup->AddLayer(new LayerModel(new MyImage::BitMap_32
 		(dialog.GetHeight(), dialog.GetWidth(), MyImage::RGBQUAD{0,0,0,0})));
 	}
 }

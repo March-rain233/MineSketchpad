@@ -16,11 +16,13 @@ public:
 	void PaintEvent(int, int, MyImage::Image&);
 	void SetOverlayMode(OverlayMode);//设置渲染模式
 	OverlayMode GetOverlayMode();//获取渲染模式
+public:
+	QString Name;
 private:
 	MyImage::Image* _image;//图层的图片资源
 	bool _isLock;//图层是否锁定
 	bool _isVisible;//图层是否可视
 	OverlayMode _overlayMode;//当前图层的渲染模式;
-	std::function<MyImage::RGBQUAD(MyImage::RGBQUAD, MyImage::RGBQUAD)> _overlayHandler;//颜色混合函数
+	std::function<MyImage::RGBQUAD(const MyImage::RGBQUAD&, const MyImage::RGBQUAD&)> _overlayHandler;//颜色混合函数
 };
 

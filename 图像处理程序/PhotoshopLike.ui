@@ -174,8 +174,17 @@
    </attribute>
    <widget class="Tools" name="Tool"/>
   </widget>
+  <widget class="QDockWidget" name="dockWidget_2">
+   <attribute name="dockWidgetArea">
+    <number>1</number>
+   </attribute>
+   <widget class="LayerGroup" name="layerGroup"/>
+  </widget>
   <action name="createImage">
    <property name="checkable">
+    <bool>true</bool>
+   </property>
+   <property name="checked">
     <bool>false</bool>
    </property>
    <property name="text">
@@ -547,6 +556,12 @@
    <class>DrawCanvas</class>
    <extends>QWidget</extends>
    <header>drawcanvas.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>LayerGroup</class>
+   <extends>QWidget</extends>
+   <header>layergroup.h</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

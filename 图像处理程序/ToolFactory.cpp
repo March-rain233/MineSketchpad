@@ -47,12 +47,10 @@ DrawTools* ToolFactory::Create(QString name) {
 		p->GetColor = [] {
 			return MyImage::RGBQUAD{ 0,0,0,0 };
 		};
-		p->OverlayMode = [](MyImage::RGBQUAD input, MyImage::RGBQUAD old)->MyImage::RGBQUAD {
-			old.rgbReserved -= input.rgbReserved;
-			if (old.rgbReserved < 0) {
-				old.rgbReserved = 0;
-			}
-			return old;
+		p->OverlayMode = [](const MyImage::RGBQUAD& input, const MyImage::RGBQUAD& old)->MyImage::RGBQUAD {
+			auto res = old;
+			res.rgbReserved = res.rgbReserved > input.rgbReserved ? res.rgbReserved - input.rgbReserved : 0;
+			return res;
 		};
 		res = p;
 	}

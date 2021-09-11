@@ -74,7 +74,7 @@ void Pencil::FillRow(int x1, int x2, int y, MyImage::RGBQUAD v) {
         x2 = device.GetImageHeight() - 1;
     }
     for (int i = x1; i <= x2; ++i) {
-        _command->SetPixel(layer, y, i, 
+        _command->SetPixel(layer, i, y, 
             OverlayMode(v,device.GetLayers()[layer]->GetImage().GetPixel(i,y)));
     }
 }

@@ -1,11 +1,12 @@
 #pragma once
 #include<functional>
 #include"Image.h"
+#include<qdebug.h>
 enum class OverlayMode {
 	Normal,
 };
 
-inline MyImage::RGBQUAD NormalOverlay( MyImage::RGBQUAD input, MyImage::RGBQUAD old) {
+inline MyImage::RGBQUAD NormalOverlay(const MyImage::RGBQUAD& input, const MyImage::RGBQUAD& old) {
 	MyImage::RGBQUAD res;
 	auto blend = [](float a1, float a2, float c1, float c2) {
 		return (c1 * a1 * (1.0 - a2) + c2 * a2) / (a1 + a2 - a1 * a2);
@@ -31,5 +32,7 @@ inline MyImage::RGBQUAD NormalOverlay( MyImage::RGBQUAD input, MyImage::RGBQUAD 
 	res.rgbGreen = fGreenBlend * 255;
 	res.rgbBlue = fBlueBlend * 255;
 	res.rgbReserved = fAlpBlend * 255;
+
+	//qDebug()<<"res:"<< res.rgbRed << " " << res.rgbGreen << " " << res.rgbBlue << " " << res.rgbReserved;
 	return res;
 };

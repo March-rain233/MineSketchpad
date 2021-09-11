@@ -21,7 +21,7 @@ public:
 private:
 	static MyPaletteModel* _instance;
 	QVector<MyImage::RGBQUAD> _colorBoard;//色板
-	MyImage::RGBQUAD _frontColor;//前景色
-	MyImage::RGBQUAD _backColor;//背景色
+	MyImage::RGBQUAD _frontColor = {0,0,0,255};//前景色
+	MyImage::RGBQUAD _backColor = {0,0,0,255};//背景色
 };
 

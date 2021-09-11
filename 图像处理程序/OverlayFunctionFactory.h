@@ -2,7 +2,7 @@
 #include "OverlayFunction.h"
 class OverlayFunctionFactory {
 public:
-	typedef std::function<MyImage::RGBQUAD(MyImage::RGBQUAD, MyImage::RGBQUAD)> OverlayFunction;
+	typedef std::function<MyImage::RGBQUAD(const MyImage::RGBQUAD&, const MyImage::RGBQUAD&)> OverlayFunction;
 	static OverlayFunctionFactory& GetInstance();
 	OverlayFunction Create(OverlayMode mode);
 private:

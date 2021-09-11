@@ -38,14 +38,12 @@ void LayerModel::PaintEvent(MyImage::Image& canvas) {
     auto p1 = canvas.GetBits();
     auto p2 = _image->GetBits();
     for (int i = 0; i < total; ++i) {
-        p1[i] = _overlayHandler(p2[i], p1[i]);
+        p1[i] = _overlayHandler(p1[i], p2[i]);
     }
 }
 
 void LayerModel::PaintEvent(int i, MyImage::Image& canvas) {
-    qDebug() << "原先" << canvas.GetPixel(i).rgbRed << " " << canvas.GetPixel(i).rgbGreen << " " << canvas.GetPixel(i).rgbBlue << " " << canvas.GetPixel(i).rgbReserved;
-    canvas.SetPixel(i, _overlayHandler(_image->GetPixel(i), canvas.GetPixel(i)));
-    qDebug() << "后来" << canvas.GetPixel(i).rgbRed << " " << canvas.GetPixel(i).rgbGreen << " " << canvas.GetPixel(i).rgbBlue << " " << canvas.GetPixel(i).rgbReserved;
+    canvas.SetPixel(i, _overlayHandler(canvas.GetPixel(i), _image->GetPixel(i)));
 }
 
 void LayerModel::PaintEvent(int i, int j, MyImage::Image& canvas) {
