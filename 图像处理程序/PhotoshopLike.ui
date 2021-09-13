@@ -128,13 +128,13 @@
      <property name="title">
       <string>画像旋转(G)</string>
      </property>
-     <addaction name="action1_8"/>
-     <addaction name="action2_7"/>
-     <addaction name="action3_7"/>
-     <addaction name="action4_7"/>
+     <addaction name="rotate180"/>
+     <addaction name="rotate90"/>
+     <addaction name="rotate270"/>
+     <addaction name="rotateAny"/>
      <addaction name="separator"/>
-     <addaction name="action5_6"/>
-     <addaction name="action6_6"/>
+     <addaction name="flipHorizontal"/>
+     <addaction name="flipVertical"/>
     </widget>
     <addaction name="menu_M"/>
     <addaction name="separator"/>
@@ -144,8 +144,8 @@
     <addaction name="action4_3"/>
     <addaction name="action5_3"/>
     <addaction name="separator"/>
-    <addaction name="action6_3"/>
-    <addaction name="action1_4"/>
+    <addaction name="imageSize"/>
+    <addaction name="canvasSize"/>
     <addaction name="menu_G"/>
     <addaction name="action3_4"/>
     <addaction name="action4_4"/>
@@ -295,12 +295,12 @@
     <string>自动颜色(O)</string>
    </property>
   </action>
-  <action name="action6_3">
+  <action name="imageSize">
    <property name="text">
     <string>图像大小(I)</string>
    </property>
   </action>
-  <action name="action1_4">
+  <action name="canvasSize">
    <property name="text">
     <string>画布大小(S)</string>
    </property>
@@ -490,32 +490,32 @@
     <string>色调均化(Q)</string>
    </property>
   </action>
-  <action name="action1_8">
+  <action name="rotate180">
    <property name="text">
     <string>180度(1)</string>
    </property>
   </action>
-  <action name="action2_7">
+  <action name="rotate90">
    <property name="text">
     <string>顺时针90度(9)</string>
    </property>
   </action>
-  <action name="action3_7">
+  <action name="rotate270">
    <property name="text">
     <string>逆时针90度(0)</string>
    </property>
   </action>
-  <action name="action4_7">
+  <action name="rotateAny">
    <property name="text">
     <string>任意角度(A)</string>
    </property>
   </action>
-  <action name="action5_6">
+  <action name="flipHorizontal">
    <property name="text">
     <string>水平翻转画布(H)</string>
    </property>
   </action>
-  <action name="action6_6">
+  <action name="flipVertical">
    <property name="text">
     <string>垂直翻转画布(V)</string>
    </property>

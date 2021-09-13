@@ -55,8 +55,8 @@ Image* MyImage::Image::ReadImage(const char* filename) {
 }
 
 MyImage::BitMap_32::BitMap_32(int h, int w) {
-	RGBQUAD default = { 255,255,255,255 };
-	_data = new Mat<RGBQUAD>(h, w, default);
+	_data = new Mat<RGBQUAD>(h, w);
+	memset(_data->GetBits(), 0, h * w * 4);
 }
 
 MyImage::BitMap_32::BitMap_32(const RGBQUAD* m, int h, int w) {

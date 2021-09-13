@@ -34,23 +34,30 @@ DrawTools* ToolFactory::Create(QString name) {
 		Pencil* p = new Pencil();
 		p->SetRadius(3);
 		p->SetAlpha(255);
-		p->GetColor = [] {
-			return MyPaletteModel::GetInstance().GetFrontColor();
+		p->FillPixel = [](LayerModel& im, int x, int y, unsigned char v, PaintCommand* c) {
+			MyImage::RGBQUAD color = MyPaletteModel::GetInstance().GetFrontColor();
+			color.rgbReserved = v;
+			c->SetPixel(x, y, NormalOverlay(color, im.GetBuffer().GetPixel(x, y)));
 		};
-		p->OverlayMode = NormalOverlay;
+		//FilterPen* p = new FilterPen();
+		//p->SetRadius(3);
+		//p->SetAlpha(255);
+		//LinearFilter* f = new LinearFilter();
+		//double k[9] = {0.0947, 0.1183, 0.0947,
+		//			   0.1183, 0.1477, 0.1183,
+		//			   0.0947, 0.1183, 0.0947};
+		//f->SetKernel(k, 1);
+		//p->SetFilter(f);
 		res = p;
 	}
 	else if (name == "Eraser") {
 		Pencil* p = new Pencil();
 		p->SetRadius(3);
 		p->SetAlpha(255);
-		p->GetColor = [] {
-			return MyImage::RGBQUAD{ 0,0,0,0 };
-		};
-		p->OverlayMode = [](const MyImage::RGBQUAD& input, const MyImage::RGBQUAD& old)->MyImage::RGBQUAD {
-			auto res = old;
-			res.rgbReserved = res.rgbReserved > input.rgbReserved ? res.rgbReserved - input.rgbReserved : 0;
-			return res;
+		p->FillPixel = [](LayerModel& im, int x, int y, unsigned char v, PaintCommand* c) {
+			MyImage::RGBQUAD color = im.GetBuffer().GetPixel(x, y);
+			color.rgbReserved = color.rgbReserved > v ? color.rgbReserved - v : 0;
+			c->SetPixel(x, y, color);
 		};
 		res = p;
 	}

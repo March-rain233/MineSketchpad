@@ -93,6 +93,7 @@
   <ItemGroup>
     <ClCompile Include="DrawToolsUI.cpp" />
     <ClCompile Include="DrawToolUIFactory.cpp" />
+    <ClCompile Include="ImageFilter.cpp" />
     <ClCompile Include="LayerGroup.cpp" />
     <ClCompile Include="LayerModel.cpp" />
     <ClCompile Include="LayerUI.cpp" />
@@ -129,6 +130,7 @@
     <ClInclude Include="DrawToolUIFactory.h" />
     <QtMoc Include="MyPalette.h" />
     <QtMoc Include="LayerGroup.h" />
+    <ClInclude Include="ImageFilter.h" />
     <ClInclude Include="LayerModel.h" />
     <QtMoc Include="LayerUI.h" />
     <ClInclude Include="MoveHand.h" />

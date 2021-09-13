@@ -10,6 +10,7 @@
 #include "DrawTools.h"
 #include "LayerModel.h"
 
+
 class DrawTools;
 
 /// <summary>

@@ -20,13 +20,6 @@
       <bool>true</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="1" column="0">
-       <widget class="QPushButton" name="DeleteLayer">
-        <property name="text">
-         <string>DeleteLayer</string>
-        </property>
-       </widget>
-      </item>
       <item row="0" column="0">
        <widget class="QPushButton" name="NewLayer">
         <property name="text">
@@ -39,6 +32,22 @@
         <property name="text">
          <string>ClearLayer</string>
         </property>
+       </widget>
+      </item>
+      <item row="1" column="0">
+       <widget class="QPushButton" name="DeleteLayer">
+        <property name="text">
+         <string>DeleteLayer</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QComboBox" name="mode">
+        <item>
+         <property name="text">
+          <string>正常</string>
+         </property>
+        </item>
        </widget>
       </item>
      </layout>

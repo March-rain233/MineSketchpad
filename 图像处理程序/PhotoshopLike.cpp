@@ -6,6 +6,7 @@
 #include <qstandardpaths.h>
 #include <QTextCodec>
 #include "LayerModel.h"
+#include "DrawCommand.h"
 
 PhotoshopLike::PhotoshopLike(QWidget* parent)
 	: QMainWindow(parent) {
@@ -24,6 +25,62 @@ PhotoshopLike::PhotoshopLike(QWidget* parent)
 	connect(ui.save, &QAction::triggered, this, &PhotoshopLike::SaveImage);
 	connect(ui.saveAs, &QAction::triggered, this, &PhotoshopLike::SaveNewImage);
 
+	connect(ui.imageSize, &QAction::triggered, [this] {
+
+		});
+
+	connect(ui.rotate90, &QAction::triggered, [this] {
+		QVector<LayerModel*> layers = ui.widget->GetLayers();
+		GroupCommand* group = new GroupCommand();
+		for(int i =0; i<layers.size(); ++i){
+			layers[i]->GetImage().Rotate(90);
+			FunctionCommand* func = new FunctionCommand();
+			func->Redo = [layers, i]() {
+				layers[i]->GetImage().Rotate(90);
+			};
+			func->Undo = [layers, i]() {
+				layers[i]->GetImage().Rotate(270);
+			};
+			group->PushBackCommand(func);
+		}
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
+		});
+	connect(ui.rotate180, &QAction::triggered, [this] {
+		auto layers = ui.widget->GetLayers();
+		GroupCommand* group = new GroupCommand();
+		for (int i = 0; i < layers.size(); ++i) {
+			layers[i]->GetImage().Rotate(180);
+			FunctionCommand* func = new FunctionCommand();
+			func->Redo = [layers, i]() {
+				layers[i]->GetImage().Rotate(180);
+			};
+			func->Undo = func->Redo;
+			group->PushBackCommand(func);
+		}
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
+		});
+	connect(ui.rotate270, &QAction::triggered, [this] {
+		auto layers = ui.widget->GetLayers();
+		GroupCommand* group = new GroupCommand();
+		for (int i = 0; i < layers.size(); ++i) {
+			layers[i]->GetImage().Rotate(270);
+			FunctionCommand* func = new FunctionCommand();
+			func->Redo = [layers, i]() {
+				layers[i]->GetImage().Rotate(270);
+			};
+			func->Undo = [layers, i]() {
+				layers[i]->GetImage().Rotate(90);
+			};
+			group->PushBackCommand(func);
+		}
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
+		});
 	ui.Tool->Rigister(ui.widget);
 	ui.layerGroup->Rigister(ui.widget);
 }

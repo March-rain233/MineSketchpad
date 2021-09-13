@@ -2,7 +2,7 @@
 #include <qpainter.h>
 
 LayerUI::LayerUI(QWidget *parent)
-	: QWidget(parent)
+	: QPushButton(parent)
 {
 	ui.setupUi(this);
 	ui.Image->installEventFilter(this);
@@ -20,14 +20,14 @@ LayerUI::~LayerUI()
 
 void LayerUI::Rigister(LayerModel* model) {
 	_model = model;
-	_model->GetImage().PixelChanged += [this](int) {
+	_model->PixelChanged += [this](int) {
 		update();
 	};
 	update();
 }
 
 void LayerUI::Clear() {
-	memset(_model->GetImage().GetBits(), 0X00FFFFFF, _model->GetImage().GetWidth() * _model->GetImage().GetHeight());
+	memset(_model->GetImage().GetBits(), 0, _model->GetImage().GetWidth() * _model->GetImage().GetHeight() * 4);
 	update();
 }
 

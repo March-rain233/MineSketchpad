@@ -6,11 +6,20 @@ LayerModel::LayerModel(MyImage::Image* val, OverlayMode mode) {
     _image = val;
     _isVisible = true;
     _isLock = false;
+    _isPainting = false;
+    _buffer = new MyImage::BitMap_32(val->GetHeight(), val->GetWidth());
+    val->PixelChanged += [this](int i) {
+        PixelChanged(i);
+    };
+    _buffer->PixelChanged += [this](int i) {
+        PixelChanged(i);
+    };
     SetOverlayMode(mode);
 }
 
 LayerModel::~LayerModel() {
     delete _image;
+    delete _buffer;
 }
 
 MyImage::Image& LayerModel::GetImage() {
@@ -31,23 +40,41 @@ void LayerModel::SetLock(bool v) {
 
 void LayerModel::SetVisible(bool v) {
     _isVisible = v;
+    VisibleChanged(v);
+}
+
+void LayerModel::BeginDraw() {
+    memcpy(_buffer->GetBits(), _image->GetBits(), _buffer->GetHeight() * _buffer->GetWidth() * 4);
+    _isPainting = true;
+}
+
+MyImage::Image& LayerModel::GetBuffer() {
+    return *_buffer;
+}
+
+void LayerModel::EndDraw() {
+    _isPainting = false;
+    std::swap(_buffer, _image);
 }
 
 void LayerModel::PaintEvent(MyImage::Image& canvas) {
-    int total = canvas.GetHeight() * canvas.GetWidth();
-    auto p1 = canvas.GetBits();
-    auto p2 = _image->GetBits();
+    int total = canvas.GetHeight() * canvas.GetWidth(); 
     for (int i = 0; i < total; ++i) {
-        p1[i] = _overlayHandler(p1[i], p2[i]);
+        PaintEvent(i, canvas);
     }
 }
 
 void LayerModel::PaintEvent(int i, MyImage::Image& canvas) {
-    canvas.SetPixel(i, _overlayHandler(canvas.GetPixel(i), _image->GetPixel(i)));
+    if (_isPainting) {
+        canvas.SetPixel(i, _overlayHandler(_buffer->GetPixel(i), canvas.GetPixel(i)));
+    }
+    else {
+        canvas.SetPixel(i, _overlayHandler(_image->GetPixel(i), canvas.GetPixel(i)));
+    }
 }
 
 void LayerModel::PaintEvent(int i, int j, MyImage::Image& canvas) {
-    canvas.SetPixel(i, j, _overlayHandler(_image->GetPixel(i, j), canvas.GetPixel(i, j)));
+    PaintEvent(i * _image->GetWidth() + j, canvas);
 }
 
 void LayerModel::SetOverlayMode(OverlayMode mode) {
@@ -57,4 +84,10 @@ void LayerModel::SetOverlayMode(OverlayMode mode) {
 
 OverlayMode LayerModel::GetOverlayMode() {
     return _overlayMode;
+}
+
+void LayerModel::Update() {
+    if (_isVisible) {
+        VisibleChanged(true);
+    }
 }

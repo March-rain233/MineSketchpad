@@ -1,45 +1,74 @@
 #include "DrawCommand.h"
 
-PaintCommand::PaintCommand(const QVector<LayerModel*>& target):_target(target) {}
+PaintCommand::PaintCommand(LayerModel& target):_target(target) {}
 
 PaintCommand::~PaintCommand() {
-	for (int i = 0; i < _changedPixel.count(); ++i) {
+	for (int i = 0; i < _changedPixel.size(); ++i) {
 		delete _changedPixel[i];
 	}
 }
 
 void PaintCommand::Execute() {
 	for (auto info : _changedPixel) {
-		_target[info->Layer]->GetImage().SetPixel(info->I, info->J, info->After);
+		_target.GetImage().SetPixel(info->I, info->J, info->After);
 	}
 }
 
 void PaintCommand::Unexecute() {
 	for (auto info : _changedPixel) {
-		_target[info->Layer]->GetImage().SetPixel(info->I, info->J, info->Before);
+		_target.GetImage().SetPixel(info->I, info->J, info->Before);
 	}
 }
 
-void PaintCommand::SetPixel(int layer, int i, int j, MyImage::RGBQUAD color) {
-	if (i < 0 || i >= _target[layer]->GetImage().GetWidth()) {
+void PaintCommand::SetPixel(int i, int j, const MyImage::RGBQUAD& color) {
+	if (i < 0 || i >= _target.GetBuffer().GetWidth()) {
 		return;
 	}
-	if (j < 0 || j >= _target[layer]->GetImage().GetHeight()) {
+	if (j < 0 || j >= _target.GetBuffer().GetHeight()) {
 		return;
 	}
 
-	MyImage::RGBQUAD t = _target[layer]->GetImage().GetPixel(i, j);
+	MyImage::RGBQUAD t = _target.GetBuffer().GetPixel(i, j);
 	if (memcmp(&color, &t, 4) == 0)
 	{
 		return;
 	}
 
 	PixelInfo* temp = new PixelInfo();
-	temp->Layer = layer;
 	temp->I = i;
 	temp->J = j;
 	temp->After = color;
 	temp->Before = t;
 	_changedPixel.push_back(temp);
-	_target[layer]->GetImage().SetPixel(i, j, color);
+	_target.GetBuffer().SetPixel(i, j, color);
+}
+
+void FunctionCommand::Execute() {
+	Redo();
+}
+
+void FunctionCommand::Unexecute() {
+	Undo();
+}
+
+GroupCommand::~GroupCommand() {
+	for (auto c : _commands) {
+		delete c;
+	}
+}
+
+void GroupCommand::Execute() {
+	for (int i = 0; i < _commands.size() - 1; ++i) {
+		_commands[i]->Execute();
+	}
+}
+
+void GroupCommand::Unexecute() {
+	for (int i = _commands.size() - 1; i>=0; --i) {
+		_commands[i]->Unexecute();
+	}
+}
+
+void GroupCommand::PushBackCommand(DrawCommand* c) {
+	_commands.push_back(c);
 }

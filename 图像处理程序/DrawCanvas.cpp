@@ -1,5 +1,6 @@
 #include "DrawCanvas.h"
 #include <qdebug.h>
+#include <qmessagebox.h>
 
 DrawCanvas::DrawCanvas(QWidget* parent)
 	: QWidget(parent), _drawPoint(0, 0) {
@@ -25,6 +26,7 @@ void DrawCanvas::Undo() {
 	DrawCommand* cur = _historyCommand.pop();
 	cur->Unexecute();
 	_redoCommand.push(cur);
+	ReDraw();
 	update();
 }
 
@@ -35,6 +37,7 @@ void DrawCanvas::Redo() {
 	DrawCommand* cur = _redoCommand.pop();
 	cur->Execute();
 	_historyCommand.push(cur);
+	ReDraw();
 	update();
 }
 
@@ -62,8 +65,12 @@ void DrawCanvas::AddLayer(LayerModel* layer) {
 		_ui.horizontalScrollBar->setRange(0, 2 * GetDrawWidth());
 		_ui.verticalScrollBar->setRange(0, 2 * GetDrawHeight());
 	}
-	layer->GetImage().PixelChanged += [this](int i) {
+	layer->PixelChanged += [this](int i) {
 		ReDraw(i);
+	};
+	layer->VisibleChanged += [this](bool) {
+		ReDraw();
+		update();
 	};
 	_layers.push_back(layer);
 	_seletcted.clear();
@@ -77,8 +84,12 @@ void DrawCanvas::InsertLayer(LayerModel* layer, int i) {
 		AddLayer(layer);
 		return;
 	}
-	layer->GetImage().PixelChanged += [this](int i) {
+	layer->PixelChanged += [this](int i) {
 		ReDraw(i);
+	};
+	layer->VisibleChanged += [this](bool) {
+		ReDraw();
+		update();
 	};
 	_layers.insert(i, layer);
 	_seletcted.clear();
@@ -87,9 +98,15 @@ void DrawCanvas::InsertLayer(LayerModel* layer, int i) {
 	update();
 }
 
-void DrawCanvas::DeleteLayer(int i) {
-	delete _layers[i];
-	_layers.remove(i);
+void DrawCanvas::DeleteLayer(int index) {
+	delete _layers[index];
+	_layers.remove(index);
+	for (int i = _seletcted.size(); i > 0; --i) {
+		if (_seletcted[i] == index) {
+			_seletcted.remove(i);
+			break;
+		}
+	}
 	ReDraw();
 	update();
 }
@@ -200,7 +217,7 @@ void DrawCanvas::mousePressEvent(QMouseEvent* e) {
 		return;
 	}
 	if (!_tool->mousePressEvent(e)) {
-
+		QMessageBox::warning(NULL, "warning", tr("当前选中图层不可进行指定操作"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 	}
 	update();
 }
@@ -210,7 +227,7 @@ void DrawCanvas::mouseReleaseEvent(QMouseEvent* e) {
 		return;
 	}
 	if (!_tool->mouseReleaseEvent(e)) {
-
+		QMessageBox::warning(NULL, "warning", tr("当前选中图层不可进行指定操作"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 	}
 	update();
 }
@@ -220,7 +237,7 @@ void DrawCanvas::mouseMoveEvent(QMouseEvent* e) {
 		return;
 	}
 	if (!_tool->mouseMoveEvent(e)) {
-
+		QMessageBox::warning(NULL, "warning", tr("当前选中图层不可进行指定操作"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 	}
 	update();
 }

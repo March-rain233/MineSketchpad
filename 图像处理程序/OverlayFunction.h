@@ -6,7 +6,7 @@ enum class OverlayMode {
 	Normal,
 };
 
-inline MyImage::RGBQUAD NormalOverlay(const MyImage::RGBQUAD& input, const MyImage::RGBQUAD& old) {
+inline MyImage::RGBQUAD NormalOverlay(const MyImage::RGBQUAD& old, const MyImage::RGBQUAD& input) {
 	MyImage::RGBQUAD res;
 	auto blend = [](float a1, float a2, float c1, float c2) {
 		return (c1 * a1 * (1.0 - a2) + c2 * a2) / (a1 + a2 - a1 * a2);

@@ -8,7 +8,7 @@ bool MoveHand::mousePressEvent(QMouseEvent* e) {
 bool MoveHand::mouseReleaseEvent(QMouseEvent* e) {
     _prePoint.setX(0);
     _prePoint.setY(0);
-    return false;
+    return true;
 }
 
 bool MoveHand::mouseMoveEvent(QMouseEvent* e) {
@@ -19,5 +19,5 @@ bool MoveHand::mouseMoveEvent(QMouseEvent* e) {
     draw.setY(draw.y() + offsetY);
     GetDevice().SetDrawPoint(draw);
     _prePoint = e->pos();
-    return false;
+    return true;
 }

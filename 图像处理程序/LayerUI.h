@@ -3,8 +3,9 @@
 #include <QWidget>
 #include "ui_LayerUI.h"
 #include "LayerModel.h"
+#include <qpushbutton.h>
 
-class LayerUI : public QWidget
+class LayerUI : public QPushButton
 {
 	Q_OBJECT
 
