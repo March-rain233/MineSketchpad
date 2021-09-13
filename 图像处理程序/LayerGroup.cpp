@@ -38,7 +38,6 @@ void LayerGroup::AddLayer(LayerModel* layer) {
 	newLayer->setCheckable(true);
 	newLayer->setChecked(true);
 	connect(newLayer, &QPushButton::toggled, [this, newLayer](bool v) {
-		if (v) {
 			int index = 0;
 			for (int i = _layerUIs.size() - 1; i >= 0; --i) {
 				if (newLayer == _layerUIs[i]) {
@@ -46,9 +45,16 @@ void LayerGroup::AddLayer(LayerModel* layer) {
 					break;
 				}
 			}
-			AddCheck(index);
-			UnCheckOther(index);
-		}});
+			if (v) {
+				AddCheck(index);
+				UnCheckOther(index);
+			}
+			else if(_device->GetSelected().contains(index)) {
+				newLayer->blockSignals(true);
+				newLayer->setChecked(true);
+				newLayer->blockSignals(false);
+			}
+		});
 	_layerUIs.push_back(newLayer);
 	ui.layerLayout->addWidget(newLayer);
 	UnCheckOther(_layerUIs.size() - 1);
@@ -80,10 +86,8 @@ void LayerGroup::InsertLayer(LayerModel* layer, int index) {
 }
 
 void LayerGroup::DeleteLayer(int i) {
-	LayerUI* temp = _layerUIs[i];
 	_layerUIs.remove(i);
 	_device->DeleteLayer(i);
-	delete temp;
 	_layerUIs[i]->setChecked(true);
 }
 
@@ -104,7 +108,9 @@ void LayerGroup::ClearAllUI() {
 void LayerGroup::UnCheckOther(int index) {
 	for (int i = 0; i < _layerUIs.size(); ++i) {
 		if (i != index) {
+			_layerUIs[i]->blockSignals(true);
 			_layerUIs[i]->setChecked(false);
+			_layerUIs[i]->blockSignals(false);
 		}
 	}
 	QVector<int>& t = _device->GetSelected();

@@ -3,6 +3,10 @@
 class ImageFilter {
 public:
 	virtual MyImage::RGBQUAD FliterPixel(MyImage::Image& m, int x, int y) = 0;
+	int GetRadius();
+	void SetRadius(int);
+protected:
+	int _radius;
 };
 
 class LinearFilter :
@@ -11,8 +15,13 @@ public:
 	virtual MyImage::RGBQUAD FliterPixel(MyImage::Image& m, int x, int y) override;
 	void SetKernel(const double* kernel, int radius);
 	double* GetKernel();
-	int GetRadius();
 private:
-	double* _kernel;
-	int _radius;
+	double* _kernel = nullptr;
+};
+
+class MedianFilter :
+	public ImageFilter {
+public:
+	MedianFilter(int);
+	virtual MyImage::RGBQUAD FliterPixel(MyImage::Image& m, int x, int y) override;
 };

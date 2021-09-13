@@ -13,4 +13,5 @@ public:
 
 private:
 	Ui::MyPalette ui;
+	bool _isHsl;
 };

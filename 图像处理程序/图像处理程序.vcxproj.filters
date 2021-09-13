@@ -103,6 +103,18 @@
     <ClCompile Include="ImageFilter.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="FilterFactory.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FilterSetter.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="FilterPenUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeHSL.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawCommand.h">
@@ -173,6 +185,18 @@
     <QtMoc Include="LayerUI.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="FilterSetter.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="FilterPenUI.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="FilterFactory.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ChangeHSL.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DrawCanvas.ui">
@@ -197,6 +221,15 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="LayerUI.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="FilterSetter.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="FilterPenUI.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ChangeHSL.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

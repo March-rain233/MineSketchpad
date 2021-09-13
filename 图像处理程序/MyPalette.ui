@@ -178,6 +178,12 @@
         </item>
         <item>
          <widget class="QSlider" name="H">
+          <property name="maximum">
+           <number>360</number>
+          </property>
+          <property name="pageStep">
+           <number>1</number>
+          </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -203,6 +209,9 @@
         </item>
         <item>
          <widget class="QSlider" name="S">
+          <property name="maximum">
+           <number>100</number>
+          </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>
@@ -228,6 +237,9 @@
         </item>
         <item>
          <widget class="QSlider" name="L">
+          <property name="maximum">
+           <number>100</number>
+          </property>
           <property name="orientation">
            <enum>Qt::Horizontal</enum>
           </property>

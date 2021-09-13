@@ -3,6 +3,7 @@
 #include "MoveHand.h"
 #include "MyPaletteModel.h"
 #include "OverlayFunction.h"
+#include "FilterFactory.h"
 
 ToolFactory* ToolFactory::_instance = nullptr;
 
@@ -39,15 +40,6 @@ DrawTools* ToolFactory::Create(QString name) {
 			color.rgbReserved = v;
 			c->SetPixel(x, y, NormalOverlay(color, im.GetBuffer().GetPixel(x, y)));
 		};
-		//FilterPen* p = new FilterPen();
-		//p->SetRadius(3);
-		//p->SetAlpha(255);
-		//LinearFilter* f = new LinearFilter();
-		//double k[9] = {0.0947, 0.1183, 0.0947,
-		//			   0.1183, 0.1477, 0.1183,
-		//			   0.0947, 0.1183, 0.0947};
-		//f->SetKernel(k, 1);
-		//p->SetFilter(f);
 		res = p;
 	}
 	else if (name == "Eraser") {
@@ -63,6 +55,14 @@ DrawTools* ToolFactory::Create(QString name) {
 	}
 	else if (name == "MoveHand") {
 		res = new MoveHand();
+	}
+	else if (name == "FilterPen"){
+		FilterPen* p = new FilterPen();
+		p->SetRadius(3);
+		p->SetAlpha(255);
+		auto f = FilterFactory::Create(1, FilterType::Normal);
+		p->SetFilter(f);
+		res = p;
 	}
 	return res;
 }

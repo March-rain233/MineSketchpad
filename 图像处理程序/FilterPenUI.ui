@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FilterPenUI</class>
+ <widget class="DrawToolsUI" name="FilterPenUI">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>400</width>
+    <height>300</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>FilterPenUI</string>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <item>
+    <layout class="QHBoxLayout" name="horizontalLayout_2">
+     <item>
+      <widget class="QLabel" name="label_4">
+       <property name="text">
+        <string>画笔大小</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSlider" name="sizeSlider">
+       <property name="orientation">
+        <enum>Qt::Horizontal</enum>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QSpinBox" name="sizeInput"/>
+     </item>
+    </layout>
+   </item>
+   <item>
+    <widget class="FilterSetter" name="widget" native="true"/>
+   </item>
+  </layout>
+ </widget>
+ <layoutdefault spacing="6" margin="11"/>
+ <customwidgets>
+  <customwidget>
+   <class>DrawToolsUI</class>
+   <extends>QWidget</extends>
+   <header>drawtoolsui.h</header>
+   <container>1</container>
+  </customwidget>
+  <customwidget>
+   <class>FilterSetter</class>
+   <extends>QWidget</extends>
+   <header>filtersetter.h</header>
+   <container>1</container>
+  </customwidget>
+ </customwidgets>
+ <resources/>
+ <connections/>
+</ui>

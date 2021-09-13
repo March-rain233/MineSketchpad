@@ -91,8 +91,12 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ChangeHSL.cpp" />
     <ClCompile Include="DrawToolsUI.cpp" />
     <ClCompile Include="DrawToolUIFactory.cpp" />
+    <ClCompile Include="FilterFactory.cpp" />
+    <ClCompile Include="FilterPenUI.cpp" />
+    <ClCompile Include="FilterSetter.cpp" />
     <ClCompile Include="ImageFilter.cpp" />
     <ClCompile Include="LayerGroup.cpp" />
     <ClCompile Include="LayerModel.cpp" />
@@ -106,9 +110,12 @@
     <ClCompile Include="ToolFactory.cpp" />
     <ClCompile Include="Tools.cpp" />
     <QtRcc Include="PhotoshopLike.qrc" />
+    <QtUic Include="ChangeHSL.ui" />
     <QtUic Include="CreateImage.ui" />
     <QtUic Include="DrawCanvas.ui" />
     <QtUic Include="DrawToolsUI.ui" />
+    <QtUic Include="FilterPenUI.ui" />
+    <QtUic Include="FilterSetter.ui" />
     <QtUic Include="LayerGroup.ui" />
     <QtUic Include="LayerUI.ui" />
     <QtUic Include="MyPalette.ui" />
@@ -127,9 +134,13 @@
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="DrawToolsUI.h" />
+    <QtMoc Include="ChangeHSL.h" />
     <ClInclude Include="DrawToolUIFactory.h" />
     <QtMoc Include="MyPalette.h" />
     <QtMoc Include="LayerGroup.h" />
+    <QtMoc Include="FilterFactory.h" />
+    <QtMoc Include="FilterSetter.h" />
+    <QtMoc Include="FilterPenUI.h" />
     <ClInclude Include="ImageFilter.h" />
     <ClInclude Include="LayerModel.h" />
     <QtMoc Include="LayerUI.h" />

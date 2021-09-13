@@ -33,8 +33,27 @@ Image* MyImage::Image::ReadImage(const char* filename) {
 	case 8:
 		break;
 	case 24:
+	{
+		res = new BitMap_32(bi.biHeight, bi.biWidth);
+		int total = bi.biWidth * bi.biHeight;
+		int linebyte = (bi.biWidth * 24 / 8 + 3) / 4 * 4;
+		for (int i = 0; i < total; i++) {
+			if (i % bi.biWidth == 0 && i != 0) {
+				bmp.seekg(linebyte - bi.biWidth * 3, std::ios::cur);
+			}
+			unsigned char buffer[3];
+			bmp.read((char*)&buffer, 3);
+			RGBQUAD t;
+			t.rgbBlue = buffer[0];
+			t.rgbGreen = buffer[1];
+			t.rgbRed = buffer[2];
+			t.rgbReserved = 255;
+			res->SetPixel(i % bi.biWidth, i / bi.biWidth, t);
+		}
+	}
 		break;
 	case 32:
+	{
 		res = new BitMap_32(bi.biHeight, bi.biWidth);
 		int total = bi.biWidth * bi.biHeight;
 		for (int i = 0; i < total; i++) {
@@ -45,8 +64,9 @@ Image* MyImage::Image::ReadImage(const char* filename) {
 			t.rgbGreen = buffer[1];
 			t.rgbRed = buffer[2];
 			t.rgbReserved = buffer[3];
-			res->SetPixel(i / bi.biWidth, i % bi.biWidth, t);
+			res->SetPixel(i % bi.biWidth, i / bi.biWidth, t);
 		}
+	}
 		break;
 	}
 	res->Flip(true);
@@ -66,7 +86,7 @@ MyImage::BitMap_32::BitMap_32(const RGBQUAD* m, int h, int w) {
 
 MyImage::BitMap_32::BitMap_32(int h, int w, const RGBQUAD& v) {
 	_data = new Mat<RGBQUAD>(h, w);
-	memset(_data->GetBits(), *reinterpret_cast<const int*>(&v), h * w * 4);
+	qFill(_data->GetBits(), _data->GetBits() + h * w, v);
 }
 
 MyImage::BitMap_32::BitMap_32(const BitMap_32& res) {
@@ -75,7 +95,7 @@ MyImage::BitMap_32::BitMap_32(const BitMap_32& res) {
 }
 
 MyImage::BitMap_32::~BitMap_32() {
-	qDebug() << "调用析构";
+	//qDebug() << "调用析构";
 	delete _data;
 }
 

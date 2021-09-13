@@ -27,18 +27,26 @@ void PencilUI::Init() {
 
 	pencil.RadiusChanged += [this](int v) {
 		if (ui.sizeInput->value() != v) {
+			ui.sizeInput->blockSignals(true);
 			ui.sizeInput->setValue(v);
+			ui.sizeInput->blockSignals(false);
 		}
 		if (ui.sizeSlider->value() != v) {
+			ui.sizeSlider->blockSignals(true);
 			ui.sizeSlider->setValue(v);
+			ui.sizeSlider->blockSignals(false);
 		}
 	};
 	pencil.AlphaChanged += [this](int v) {
 		if (ui.alphaInput->value() != v) {
+			ui.alphaInput->blockSignals(true);
 			ui.alphaInput->setValue(v);
+			ui.alphaInput->blockSignals(false);
 		}
 		if (ui.alphaSlider->value() != v) {
+			ui.alphaSlider->blockSignals(true);
 			ui.alphaSlider->setValue(v);
+			ui.alphaSlider->blockSignals(false);
 		}
 	};
 	pencil.UpdateAll();
