@@ -21,6 +21,7 @@ public:
 	void DeleteLayer(int);//删除指定图层
 	void ClearLayer(int);//清除指定图层
 	void ClearAllUI();//清空UI
+	void CloseActions(bool);
 private:
 	void UnCheckOther(int);//关闭其他选择框
 	void AddCheck(int);//选中选择框的处理函数

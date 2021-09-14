@@ -1,9 +1,11 @@
 #include "LayerGroup.h"
+#include <qmessagebox.h>
 
 LayerGroup::LayerGroup(QWidget *parent)
 	: QWidget(parent)
 {
 	ui.setupUi(this);
+	CloseActions(false);
 	connect(ui.NewLayer, &QPushButton::clicked, [this] {
 		int num = _device->GetSelected()[_device->GetSelected().size() - 1];
 		LayerModel* layer = new LayerModel(new MyImage::BitMap_32
@@ -12,12 +14,12 @@ LayerGroup::LayerGroup(QWidget *parent)
 		});
 	connect(ui.DeleteLayer, &QPushButton::clicked, [this] {
 		for (int i = _device->GetSelected().size() - 1; i >= 0; --i) {
-			DeleteLayer(i);
+			DeleteLayer(_device->GetSelected()[i]);
 		}
 		});
 	connect(ui.ClearLayer, &QPushButton::clicked, [this] {
 		for (int i = _device->GetSelected().size() - 1; i >= 0; --i) {
-			ClearLayer(i);
+			ClearLayer(_device->GetSelected()[i]);
 		}
 		});
 }
@@ -28,6 +30,7 @@ LayerGroup::~LayerGroup()
 
 void LayerGroup::Rigister(DrawCanvas* device) {
 	_device = device;
+	connect(_device, &DrawCanvas::EmptyChange, this, &LayerGroup::CloseActions);
 }
 
 void LayerGroup::AddLayer(LayerModel* layer) {
@@ -35,8 +38,6 @@ void LayerGroup::AddLayer(LayerModel* layer) {
 
 	LayerUI* newLayer = new LayerUI(this);
 	newLayer->Rigister(layer);
-	newLayer->setCheckable(true);
-	newLayer->setChecked(true);
 	connect(newLayer, &QPushButton::toggled, [this, newLayer](bool v) {
 			int index = 0;
 			for (int i = _layerUIs.size() - 1; i >= 0; --i) {
@@ -47,17 +48,27 @@ void LayerGroup::AddLayer(LayerModel* layer) {
 			}
 			if (v) {
 				AddCheck(index);
-				UnCheckOther(index);
+				//UnCheckOther(index);
 			}
-			else if(_device->GetSelected().contains(index)) {
+			else if(_device->GetSelected().size() == 1) {
 				newLayer->blockSignals(true);
 				newLayer->setChecked(true);
 				newLayer->blockSignals(false);
 			}
+			else {
+				QVector<int>& select = _device->GetSelected();
+				for (int i = select.size() - 1; i >= 0; --i) {
+					if (select[i] == index) {
+						select.remove(i);
+					}
+				}
+			}
 		});
 	_layerUIs.push_back(newLayer);
 	ui.layerLayout->addWidget(newLayer);
-	UnCheckOther(_layerUIs.size() - 1);
+	newLayer->setCheckable(true);
+	newLayer->setChecked(true);
+	//UnCheckOther(_layerUIs.size() - 1);
 	newLayer->show();
 }
 
@@ -65,29 +76,52 @@ void LayerGroup::InsertLayer(LayerModel* layer, int index) {
 	_device->InsertLayer(layer, index);
 	LayerUI* newLayer = new LayerUI(this);
 	newLayer->Rigister(layer);
-	newLayer->setCheckable(true);
-	newLayer->setChecked(true);
 	connect(newLayer, &QPushButton::toggled, [this, newLayer](bool v) {
+		int index = 0;
+		for (int i = _layerUIs.size() - 1; i >= 0; --i) {
+			if (newLayer == _layerUIs[i]) {
+				index = i;
+				break;
+			}
+		}
 		if (v) {
-			int index = 0;
-			for (int i = _layerUIs.size() - 1; i >= 0; --i) {
-				if (newLayer == _layerUIs[i]) {
-					index = i;
-					break;
+			AddCheck(index);
+			//UnCheckOther(index);
+		}
+		else if (_device->GetSelected().size() == 1) {
+			newLayer->blockSignals(true);
+			newLayer->setChecked(true);
+			newLayer->blockSignals(false);
+		}
+		else {
+			QVector<int>& select = _device->GetSelected();
+			for (int i = select.size() - 1; i >= 0; --i) {
+				if (select[i] == index) {
+					select.remove(i);
 				}
 			}
-			AddCheck(index);
-			UnCheckOther(index);
-		}});
+		}
+		});
 	_layerUIs.insert(index, newLayer);
 	ui.layerLayout->insertWidget(index, newLayer);
-	UnCheckOther(index);
+	newLayer->setCheckable(true);
+	newLayer->setChecked(true);
+	//UnCheckOther(index);
 	newLayer->show();
 }
 
 void LayerGroup::DeleteLayer(int i) {
+	if (_layerUIs.size() == 1) {
+		QMessageBox::warning(NULL, "warning", QStringLiteral("无法删除当前图层"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+		return;
+	}
+	delete _layerUIs[i];
 	_layerUIs.remove(i);
 	_device->DeleteLayer(i);
+	if (i >= _layerUIs.size()) {
+		i = _layerUIs.size() - 1;
+	}
+	_device->GetSelected().clear();
 	_layerUIs[i]->setChecked(true);
 }
 
@@ -103,6 +137,12 @@ void LayerGroup::ClearAllUI() {
 		delete _layerUIs[i];
 	}
 	_layerUIs.clear();
+}
+
+void LayerGroup::CloseActions(bool v) {
+	ui.ClearLayer->setEnabled(v);
+	ui.DeleteLayer->setEnabled(v);
+	ui.NewLayer->setEnabled(v);
 }
 
 void LayerGroup::UnCheckOther(int index) {

@@ -6,6 +6,7 @@ DrawCanvas::DrawCanvas(QWidget* parent)
 	: QWidget(parent), _drawPoint(0, 0) {
 	_ui.setupUi(this);
 	_ui.Image->installEventFilter(this);
+	_canvas = nullptr;
 	_tool = nullptr;
 	_canvasFill = nullptr;
 	_ui.horizontalScrollBar->setRange(0, 0);
@@ -57,6 +58,7 @@ void DrawCanvas::ClearRedoCommand() {
 }
 
 void DrawCanvas::AddLayer(LayerModel* layer) {
+	emit EmptyChange(true);
 	if (_layers.size() == 0) {
 		int picMax = layer->GetImage().GetWidth() > layer->GetImage().GetHeight() ?
 			layer->GetImage().GetWidth() : layer->GetImage().GetHeight();
@@ -73,8 +75,8 @@ void DrawCanvas::AddLayer(LayerModel* layer) {
 		update();
 	};
 	_layers.push_back(layer);
-	_seletcted.clear();
-	_seletcted.push_back(_layers.size() - 1);
+	//_seletcted.clear();
+	//_seletcted.push_back(_layers.size() - 1);
 	ReDraw();
 	update();
 }
@@ -84,6 +86,7 @@ void DrawCanvas::InsertLayer(LayerModel* layer, int i) {
 		AddLayer(layer);
 		return;
 	}
+	emit EmptyChange(true);
 	layer->PixelChanged += [this](int i) {
 		ReDraw(i);
 	};
@@ -92,8 +95,8 @@ void DrawCanvas::InsertLayer(LayerModel* layer, int i) {
 		update();
 	};
 	_layers.insert(i, layer);
-	_seletcted.clear();
-	_seletcted.push_back(i);
+	//_seletcted.clear();
+	//_seletcted.push_back(i);
 	ReDraw();
 	update();
 }
@@ -101,11 +104,14 @@ void DrawCanvas::InsertLayer(LayerModel* layer, int i) {
 void DrawCanvas::DeleteLayer(int index) {
 	delete _layers[index];
 	_layers.remove(index);
-	for (int i = _seletcted.size(); i > 0; --i) {
+	for (int i = _seletcted.size() - 1; i >= 0; --i) {
 		if (_seletcted[i] == index) {
 			_seletcted.remove(i);
 			break;
 		}
+	}
+	if (IsEmpty()) {
+		emit EmptyChange(false);
 	}
 	ReDraw();
 	update();
@@ -179,6 +185,20 @@ bool DrawCanvas::IsEmpty() {
 	return _layers.isEmpty();
 }
 
+void DrawCanvas::Resize(int h, int w) {
+	auto layer = GetLayers();
+	_canvas->Resize(h, w);
+	_canvasFill->Resize(h, w);
+	for (int i = 0; i < layer.size(); ++i) {
+		auto newImage = layer[i]->GetImage().Clone();
+		newImage->Resize(h, w);
+		layer[i]->SetImage(newImage);
+		delete newImage;
+	}
+	ReDraw();
+	update();
+}
+
 void DrawCanvas::ReDraw() {
 	memcpy(_canvas->GetBits(), _canvasFill->GetBits(),
 		_canvas->GetWidth() * _canvas->GetHeight() * 4);
@@ -217,7 +237,7 @@ void DrawCanvas::mousePressEvent(QMouseEvent* e) {
 		return;
 	}
 	if (!_tool->mousePressEvent(e)) {
-		QMessageBox::warning(NULL, "warning", tr("当前选中图层不可进行指定操作"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+		QMessageBox::warning(NULL, "warning", QStringLiteral("当前选中图层不可进行指定操作"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 	}
 	update();
 }
@@ -227,7 +247,7 @@ void DrawCanvas::mouseReleaseEvent(QMouseEvent* e) {
 		return;
 	}
 	if (!_tool->mouseReleaseEvent(e)) {
-		QMessageBox::warning(NULL, "warning", tr("当前选中图层不可进行指定操作"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+		QMessageBox::warning(NULL, "warning", QStringLiteral("当前选中图层不可进行指定操作"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 	}
 	update();
 }
@@ -237,7 +257,7 @@ void DrawCanvas::mouseMoveEvent(QMouseEvent* e) {
 		return;
 	}
 	if (!_tool->mouseMoveEvent(e)) {
-		QMessageBox::warning(NULL, "warning", tr("当前选中图层不可进行指定操作"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
+		QMessageBox::warning(NULL, "warning", QStringLiteral("当前选中图层不可进行指定操作"), QMessageBox::Yes | QMessageBox::No, QMessageBox::Yes);
 	}
 	update();
 }
@@ -277,7 +297,7 @@ bool DrawCanvas::eventFilter(QObject* watched, QEvent* event) {
 }
 
 void DrawCanvas::DrawImage() {
-	if (!_layers.isEmpty()) {
+	if (!IsEmpty()) {
 		QPainter painter;
 		painter.begin(_ui.Image);
 		painter.drawImage(GetDrawRect(), _canvas->ToQImage());

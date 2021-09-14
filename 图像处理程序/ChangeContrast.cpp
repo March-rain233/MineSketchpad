@@ -73,6 +73,7 @@ ChangeContrast::ChangeContrast(DrawCanvas* device, QWidget *parent)
 			CopyCommand* copy = new CopyCommand();
 			copy->Last = layer[selected[i]]->GetImage().Clone();
 			copy->After = layer[selected[i]]->GetBuffer().Clone();
+			copy->Target = layer[selected[i]];
 			group->PushBackCommand(copy);
 			layer[selected[i]]->EndDraw();
 		}

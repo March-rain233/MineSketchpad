@@ -15,6 +15,21 @@
   </property>
   <widget class="QWidget" name="centralWidget">
    <layout class="QGridLayout" name="gridLayout">
+    <property name="leftMargin">
+     <number>0</number>
+    </property>
+    <property name="topMargin">
+     <number>0</number>
+    </property>
+    <property name="rightMargin">
+     <number>0</number>
+    </property>
+    <property name="bottomMargin">
+     <number>0</number>
+    </property>
+    <property name="spacing">
+     <number>0</number>
+    </property>
     <item row="0" column="0">
      <widget class="DrawCanvas" name="widget" native="true"/>
     </item>
@@ -39,7 +54,7 @@
     <addaction name="saveAs"/>
     <addaction name="save"/>
     <addaction name="separator"/>
-    <addaction name="action7"/>
+    <addaction name="exit"/>
    </widget>
    <widget class="QMenu" name="menu_E">
     <property name="title">
@@ -72,6 +87,7 @@
      <addaction name="separator"/>
      <addaction name="gray"/>
      <addaction name="inverse"/>
+     <addaction name="bianry"/>
     </widget>
     <addaction name="menu_J_2"/>
     <addaction name="separator"/>
@@ -104,6 +120,9 @@
    <widget class="Tools" name="Tool"/>
   </widget>
   <widget class="QDockWidget" name="dockWidget_2">
+   <property name="features">
+    <set>QDockWidget::DockWidgetFloatable|QDockWidget::DockWidgetMovable</set>
+   </property>
    <attribute name="dockWidgetArea">
     <number>1</number>
    </attribute>
@@ -111,7 +130,7 @@
   </widget>
   <action name="createImage">
    <property name="checkable">
-    <bool>true</bool>
+    <bool>false</bool>
    </property>
    <property name="checked">
     <bool>false</bool>
@@ -143,7 +162,7 @@
     <string>导入(M)</string>
    </property>
   </action>
-  <action name="action7">
+  <action name="exit">
    <property name="text">
     <string>退出(X)</string>
    </property>
@@ -490,6 +509,11 @@
   <action name="cb">
    <property name="text">
     <string>亮度/对比度</string>
+   </property>
+  </action>
+  <action name="bianry">
+   <property name="text">
+    <string>二值化</string>
    </property>
   </action>
  </widget>

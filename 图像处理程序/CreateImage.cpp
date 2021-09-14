@@ -19,7 +19,7 @@ CreateImage::CreateImage(QWidget *parent)
 	SetColor(Qt::white);
 	SetHeight(500);
 	SetWidth(500);
-	_filename = QString::fromLocal8Bit("新建画布");
+	_filename = QStringLiteral("新建画布");
 	_ui.filename->setText(_filename);
 	_ui.height->setText(QString::number(_height));
 	_ui.width->setText(QString::number(_width));

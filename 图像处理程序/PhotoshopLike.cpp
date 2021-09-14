@@ -9,12 +9,15 @@
 #include "DrawCommand.h"
 #include "ChangeHSL.h"
 #include "ChangeContrast.h"
+#include "ChangeSize.h"
+#include "Binaryzation.h"
 
 PhotoshopLike::PhotoshopLike(QWidget* parent)
 	: QMainWindow(parent) {
 	ui.setupUi(this);
 	//setWindowFlags(Qt::FramelessWindowHint);
-
+	CloseActions(false);
+	connect(ui.widget, &DrawCanvas::EmptyChange, this, &PhotoshopLike::CloseActions);
 	connect(ui.openImage, &QAction::triggered, this, &PhotoshopLike::OpenImage);
 	connect(ui.createImage, &QAction::triggered, this, &PhotoshopLike::CreateNewImage);
 
@@ -28,7 +31,17 @@ PhotoshopLike::PhotoshopLike(QWidget* parent)
 	connect(ui.saveAs, &QAction::triggered, this, &PhotoshopLike::SaveNewImage);
 
 	connect(ui.imageSize, &QAction::triggered, [this] {
-
+		ChangeSize size(ui.widget, this);
+		if (size.exec() == QDialog::Accepted) {
+			FunctionCommand* com = new FunctionCommand();
+			int h = size.GetHeight();
+			int w = size.GetWidth();
+			int oh = ui.widget->GetImageHeight();
+			int ow = ui.widget->GetImageWidth();
+			com->Redo = [h, w, this] {ui.widget->Resize(h, w); };
+			com->Undo = [oh, ow, this] {ui.widget->Resize(oh, ow); };
+			ui.widget->Resize(h, w);
+		}
 		});
 
 	connect(ui.HSL, &QAction::triggered, [this] {
@@ -79,6 +92,10 @@ PhotoshopLike::PhotoshopLike(QWidget* parent)
 		ui.widget->PushCommand(group);
 		ui.widget->ReDraw();
 		ui.widget->update();
+		});
+	connect(ui.bianry, &QAction::triggered, [this] {
+		Binaryzation bi(ui.widget, this);
+		bi.exec();
 		});
 
 	connect(ui.rotate90, &QAction::triggered, [this] {
@@ -133,6 +150,10 @@ PhotoshopLike::PhotoshopLike(QWidget* parent)
 		ui.widget->ReDraw();
 		ui.widget->update();
 		});
+
+	connect(ui.exit, &QAction::triggered, [] {
+		QApplication::quit();
+		});
 	ui.Tool->Rigister(ui.widget);
 	ui.layerGroup->Rigister(ui.widget);
 }
@@ -176,7 +197,8 @@ void PhotoshopLike::SaveImage() {
 	if (ui.widget->IsEmpty()) {
 		return;
 	}
-	ui.widget->SaveImage(_fileName + ".bmp");
+	QString fileName = _fileName.contains(".bmp") ? _fileName : _fileName + ".bmp";
+	ui.widget->SaveImage(fileName);
 }
 
 void PhotoshopLike::SaveNewImage() {
@@ -191,4 +213,12 @@ void PhotoshopLike::SaveNewImage() {
 	QTextCodec* code = QTextCodec::codecForName("GB2312");
 	std::string name = code->fromUnicode(filename).data();
 	ui.widget->SaveImage(name.c_str());
+}
+
+void PhotoshopLike::CloseActions(bool v) {
+	ui.bianry->setEnabled(v);
+	ui.save->setEnabled(v);
+	ui.saveAs->setEnabled(v);
+	ui.menu_I->setEnabled(v);
+	ui.menu_E->setEnabled(v);
 }

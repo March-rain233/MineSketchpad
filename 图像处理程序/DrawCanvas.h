@@ -50,6 +50,7 @@ public:
 
 	void ClearCanvas();//清除画板
 	bool IsEmpty();//是否在工作
+	void Resize(int h, int w);//缩放图片
 
 	void ReDraw();//重新完全绘制画布
 	void ReDraw(int);//重绘一维数组i处点
@@ -57,6 +58,9 @@ public:
 
 	int GetImageHeight();//获取图片的实际高度
 	int GetImageWidth();//获取图片的实际宽度
+
+signals:
+	void EmptyChange(bool);
 private:
 	void mousePressEvent(QMouseEvent*) override;//重写鼠标按下事件
 	void mouseReleaseEvent(QMouseEvent*) override;//重写鼠标释放事件

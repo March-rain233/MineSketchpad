@@ -14,6 +14,7 @@ FilterPenUI::~FilterPenUI()
 void FilterPenUI::Init() {
 	FilterPen& pencil = (FilterPen&)GetTool();
 	ui.widget->SetFilter(pencil.GetFilter());
+	ui.sizeInput->setValue(1);
 
 	connect(ui.sizeSlider, &QAbstractSlider::valueChanged, [this, &pencil](int v) {
 		pencil.SetRadius(v);

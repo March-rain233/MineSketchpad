@@ -15,6 +15,7 @@ private:
 	void CreateNewImage();
 	void SaveImage();
 	void SaveNewImage();
+	void CloseActions(bool);
 
 private:
 	Ui::PhotoshopLike ui;

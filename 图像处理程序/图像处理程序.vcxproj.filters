@@ -124,6 +124,9 @@
     <ClCompile Include="ChangeSize.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Binaryzation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawCommand.h">
@@ -215,6 +218,9 @@
     <QtMoc Include="ChangeSize.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="Binaryzation.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DrawCanvas.ui">
@@ -254,6 +260,9 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="ChangeSize.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="Binaryzation.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

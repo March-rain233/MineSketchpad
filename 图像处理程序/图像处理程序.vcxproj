@@ -91,6 +91,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="Binaryzation.cpp" />
     <ClCompile Include="ChangeContrast.cpp" />
     <ClCompile Include="ChangeHSL.cpp" />
     <ClCompile Include="ChangeSize.cpp" />
@@ -113,6 +114,7 @@
     <ClCompile Include="ToolFactory.cpp" />
     <ClCompile Include="Tools.cpp" />
     <QtRcc Include="PhotoshopLike.qrc" />
+    <QtUic Include="Binaryzation.ui" />
     <QtUic Include="ChangeContrast.ui" />
     <QtUic Include="ChangeHSL.ui" />
     <QtUic Include="ChangeSize.ui" />
@@ -142,6 +144,7 @@
     <QtMoc Include="ChangeHSL.h" />
     <QtMoc Include="ChangeContrast.h" />
     <QtMoc Include="ChangeSize.h" />
+    <QtMoc Include="Binaryzation.h" />
     <ClInclude Include="DrawToolUIFactory.h" />
     <QtMoc Include="MyPalette.h" />
     <QtMoc Include="LayerGroup.h" />
