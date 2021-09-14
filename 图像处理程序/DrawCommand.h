@@ -2,6 +2,7 @@
 #include "Image.h"
 #include "qvector.h"
 #include "LayerModel.h"
+#include <qmap.h>
 #include <functional>
 #include <qqueue.h>
 
@@ -21,6 +22,7 @@ public:
 	 ///撤回
 	 ///</summary>
 	virtual void Unexecute() = 0;
+	virtual ~DrawCommand() {};
 };
 
 class GroupCommand :
@@ -52,8 +54,9 @@ private:
 		MyImage::RGBQUAD Before;
 		MyImage::RGBQUAD After;
 	};
-	QVector<PixelInfo*> _changedPixel;//修改的数据
+	QMap<int, PixelInfo*> _changedPixel;//修改的数据
 	LayerModel& _target;//修改对象
+	int _hasCode;
 };
 
 //执行函数命令

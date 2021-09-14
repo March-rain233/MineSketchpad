@@ -60,7 +60,9 @@ public:
 	int GetImageWidth();//获取图片的实际宽度
 
 signals:
-	void EmptyChange(bool);
+	void EmptyChanged(bool);
+	void RedoNumChanged(int);
+	void UndoNumChanged(int);
 private:
 	void mousePressEvent(QMouseEvent*) override;//重写鼠标按下事件
 	void mouseReleaseEvent(QMouseEvent*) override;//重写鼠标释放事件

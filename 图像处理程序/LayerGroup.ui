@@ -20,10 +20,10 @@
       <bool>true</bool>
      </property>
      <layout class="QGridLayout" name="gridLayout">
-      <item row="0" column="0">
-       <widget class="QPushButton" name="NewLayer">
+      <item row="1" column="0">
+       <widget class="QPushButton" name="DeleteLayer">
         <property name="text">
-         <string>NewLayer</string>
+         <string>DeleteLayer</string>
         </property>
        </widget>
       </item>
@@ -34,10 +34,17 @@
         </property>
        </widget>
       </item>
-      <item row="1" column="0">
-       <widget class="QPushButton" name="DeleteLayer">
+      <item row="0" column="0">
+       <widget class="QPushButton" name="NewLayer">
         <property name="text">
-         <string>DeleteLayer</string>
+         <string>NewLayer</string>
+        </property>
+       </widget>
+      </item>
+      <item row="3" column="0">
+       <widget class="QPushButton" name="openFile">
+        <property name="text">
+         <string>OpenFile</string>
         </property>
        </widget>
       </item>

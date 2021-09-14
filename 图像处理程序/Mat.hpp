@@ -347,6 +347,9 @@ inline void Mat<T, compare>::Flip(int code) {
 
 template<typename T, typename compare>
 inline void Mat<T, compare>::Resize(int h, int w) {
+    if (h == 0 || w == 0) {
+        return;
+    }
     bool wBig = w > _width;
     double hi = _height / h;
     double wi = _width / w;

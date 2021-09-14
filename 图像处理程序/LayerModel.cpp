@@ -53,6 +53,14 @@ void LayerModel::SetVisible(bool v) {
     VisibleChanged(v);
 }
 
+void LayerModel::SetAlpha(unsigned char v) {
+    _alpha = v;
+}
+
+unsigned char LayerModel::GetAlpha() {
+    return _alpha;
+}
+
 void LayerModel::BeginDraw() {
     memcpy(_buffer->GetBits(), _image->GetBits(), _buffer->GetHeight() * _buffer->GetWidth() * 4);
     _isPainting = true;
@@ -80,10 +88,10 @@ void LayerModel::PaintEvent(MyImage::Image& canvas) {
 
 void LayerModel::PaintEvent(int i, MyImage::Image& canvas) {
     if (_isPainting) {
-        canvas.SetPixel(i, _overlayHandler(_buffer->GetPixel(i), canvas.GetPixel(i)));
+        canvas.SetPixel(i, _overlayHandler(canvas.GetPixel(i), _buffer->GetPixel(i), _alpha));
     }
     else {
-        canvas.SetPixel(i, _overlayHandler(_image->GetPixel(i), canvas.GetPixel(i)));
+        canvas.SetPixel(i, _overlayHandler(canvas.GetPixel(i), _image->GetPixel(i), _alpha));
     }
 }
 

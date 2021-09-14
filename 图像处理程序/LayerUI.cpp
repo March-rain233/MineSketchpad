@@ -12,6 +12,15 @@ LayerUI::LayerUI(QWidget *parent)
 	connect(ui.visible, &QAbstractButton::toggled, [this](bool v) {
 		_model->SetVisible(v);
 		});
+	connect(ui.alpha, &QAbstractSlider::valueChanged, [this](int v) {
+		ui.output->setText(QString::number(v));
+		_model->SetAlpha(v);
+		_model->Update();
+		});
+	connect(ui.mode, static_cast<void(QComboBox::*)(int)>(&QComboBox::currentIndexChanged), [this](int v) {
+		_model->SetOverlayMode((OverlayMode)v);
+		_model->Update();
+		});
 }
 
 LayerUI::~LayerUI()
@@ -23,6 +32,10 @@ void LayerUI::Rigister(LayerModel* model) {
 	_model->PixelChanged += [this](int) {
 		update();
 	};
+	ui.alpha->setValue(_model->GetAlpha());
+	ui.mode->blockSignals(true);
+	ui.mode->setCurrentIndex((int)model->GetOverlayMode());
+	ui.mode->blockSignals(false);
 	update();
 }
 

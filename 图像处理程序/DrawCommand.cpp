@@ -1,10 +1,12 @@
 #include "DrawCommand.h"
 
-PaintCommand::PaintCommand(LayerModel& target):_target(target) {}
+PaintCommand::PaintCommand(LayerModel& target):_target(target) {
+	_hasCode = target.GetImage().GetWidth();
+}
 
 PaintCommand::~PaintCommand() {
-	for (int i = 0; i < _changedPixel.size(); ++i) {
-		delete _changedPixel[i];
+	for (auto info : _changedPixel) {
+		delete info;
 	}
 }
 
@@ -34,12 +36,18 @@ void PaintCommand::SetPixel(int i, int j, const MyImage::RGBQUAD& color) {
 		return;
 	}
 
-	PixelInfo* temp = new PixelInfo();
-	temp->I = i;
-	temp->J = j;
-	temp->After = color;
-	temp->Before = t;
-	_changedPixel.push_back(temp);
+	int key = j * _hasCode + i;
+	if (_changedPixel.contains(key)) {
+		_changedPixel[key]->After = color;
+	}
+	else {
+		PixelInfo* temp = new PixelInfo();
+		temp->I = i;
+		temp->J = j;
+		temp->After = color;
+		temp->Before = t;
+		_changedPixel.insert(key, temp);
+	}
 	_target.GetBuffer().SetPixel(i, j, color);
 }
 
@@ -58,7 +66,7 @@ GroupCommand::~GroupCommand() {
 }
 
 void GroupCommand::Execute() {
-	for (int i = 0; i < _commands.size() - 1; ++i) {
+	for (int i = 0; i <= _commands.size() - 1; ++i) {
 		_commands[i]->Execute();
 	}
 }

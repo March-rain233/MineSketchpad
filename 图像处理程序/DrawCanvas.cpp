@@ -27,6 +27,8 @@ void DrawCanvas::Undo() {
 	DrawCommand* cur = _historyCommand.pop();
 	cur->Unexecute();
 	_redoCommand.push(cur);
+	UndoNumChanged(_historyCommand.size());
+	RedoNumChanged(_redoCommand.size());
 	ReDraw();
 	update();
 }
@@ -38,12 +40,14 @@ void DrawCanvas::Redo() {
 	DrawCommand* cur = _redoCommand.pop();
 	cur->Execute();
 	_historyCommand.push(cur);
+	UndoNumChanged(_historyCommand.size());
+	RedoNumChanged(_redoCommand.size());
 	ReDraw();
 	update();
 }
 
 void DrawCanvas::ClearCommand() {
-	for (int i = 0; i < _historyCommand.count(); ++i) {
+	for (int i = 0; i < _historyCommand.size(); ++i) {
 		delete _historyCommand[i];
 	}
 	_historyCommand.clear();
@@ -51,14 +55,16 @@ void DrawCanvas::ClearCommand() {
 }
 
 void DrawCanvas::ClearRedoCommand() {
-	for (int i = 0; i < _redoCommand.count(); ++i) {
+	for (int i = 0; i < _redoCommand.size(); ++i) {
 		delete _redoCommand[i];
 	}
 	_redoCommand.clear();
+	UndoNumChanged(_historyCommand.size());
+	RedoNumChanged(_redoCommand.size());
 }
 
 void DrawCanvas::AddLayer(LayerModel* layer) {
-	emit EmptyChange(true);
+	emit EmptyChanged(true);
 	if (_layers.size() == 0) {
 		int picMax = layer->GetImage().GetWidth() > layer->GetImage().GetHeight() ?
 			layer->GetImage().GetWidth() : layer->GetImage().GetHeight();
@@ -86,7 +92,7 @@ void DrawCanvas::InsertLayer(LayerModel* layer, int i) {
 		AddLayer(layer);
 		return;
 	}
-	emit EmptyChange(true);
+	emit EmptyChanged(true);
 	layer->PixelChanged += [this](int i) {
 		ReDraw(i);
 	};
@@ -111,7 +117,7 @@ void DrawCanvas::DeleteLayer(int index) {
 		}
 	}
 	if (IsEmpty()) {
-		emit EmptyChange(false);
+		emit EmptyChanged(false);
 	}
 	ReDraw();
 	update();
@@ -152,6 +158,8 @@ void DrawCanvas::SaveImage(const QString& fileName) {
 void DrawCanvas::PushCommand(DrawCommand* c) {
 	ClearRedoCommand();
 	_historyCommand.push(c);
+	UndoNumChanged(_historyCommand.size());
+	RedoNumChanged(_redoCommand.size());
 }
 
 void DrawCanvas::SetTool(DrawTools* t) {
@@ -306,6 +314,9 @@ void DrawCanvas::DrawImage() {
 }
 
 void DrawCanvas::SetDrawPoint(QPoint p) {
+	if (IsEmpty()) {
+		return;
+	}
 	int x = p.x();
 	int y = p.y();
 	int w = _ui.Image->rect().width();

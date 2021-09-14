@@ -38,8 +38,7 @@ DrawTools* ToolFactory::Create(QString name) {
 		p->SetAlpha(255);
 		p->FillPixel = [](LayerModel& im, int x, int y, unsigned char v, PaintCommand* c) {
 			MyImage::RGBQUAD color = MyPaletteModel::GetInstance().GetFrontColor();
-			color.rgbReserved = v;
-			c->SetPixel(x, y, NormalOverlay(color, im.GetBuffer().GetPixel(x, y)));
+			c->SetPixel(x, y, NormalOverlay(im.GetImage().GetPixel(x, y), color, v));
 		};
 		res = p;
 	}

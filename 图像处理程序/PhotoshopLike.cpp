@@ -17,7 +17,7 @@ PhotoshopLike::PhotoshopLike(QWidget* parent)
 	ui.setupUi(this);
 	//setWindowFlags(Qt::FramelessWindowHint);
 	CloseActions(false);
-	connect(ui.widget, &DrawCanvas::EmptyChange, this, &PhotoshopLike::CloseActions);
+	connect(ui.widget, &DrawCanvas::EmptyChanged, this, &PhotoshopLike::CloseActions);
 	connect(ui.openImage, &QAction::triggered, this, &PhotoshopLike::OpenImage);
 	connect(ui.createImage, &QAction::triggered, this, &PhotoshopLike::CreateNewImage);
 
@@ -150,9 +150,64 @@ PhotoshopLike::PhotoshopLike(QWidget* parent)
 		ui.widget->ReDraw();
 		ui.widget->update();
 		});
+	connect(ui.flipHorizontal, &QAction::triggered, [this] {
+		QVector<LayerModel*> layers = ui.widget->GetLayers();
+		GroupCommand* group = new GroupCommand();
+		for (int i = 0; i < layers.size(); ++i) {
+			layers[i]->GetImage().Flip(false);
+			FunctionCommand* func = new FunctionCommand();
+			func->Redo = [layers, i]() {
+				layers[i]->GetImage().Flip(false);
+			};
+			func->Undo = [layers, i]() {
+				layers[i]->GetImage().Flip(false);
+			};
+			group->PushBackCommand(func);
+		}
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
+		});
+	connect(ui.flipVertical, &QAction::triggered, [this] {
+		QVector<LayerModel*> layers = ui.widget->GetLayers();
+		GroupCommand* group = new GroupCommand();
+		for (int i = 0; i < layers.size(); ++i) {
+			layers[i]->GetImage().Flip(true);
+			FunctionCommand* func = new FunctionCommand();
+			func->Redo = [layers, i]() {
+				layers[i]->GetImage().Flip(true);
+			};
+			func->Undo = [layers, i]() {
+				layers[i]->GetImage().Flip(true);
+			};
+			group->PushBackCommand(func);
+		}
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
+		});
 
 	connect(ui.exit, &QAction::triggered, [] {
 		QApplication::quit();
+		});
+
+	ui.redo->setEnabled(false);
+	ui.undo->setEnabled(false);
+	connect(ui.widget, &DrawCanvas::RedoNumChanged, [this] (int i){
+		if (i > 0) {
+			ui.redo->setEnabled(true);
+		}
+		else {
+			ui.redo->setEnabled(false);
+		}
+		});
+	connect(ui.widget, &DrawCanvas::UndoNumChanged, [this](int i) {
+		if (i > 0) {
+			ui.undo->setEnabled(true);
+		}
+		else {
+			ui.undo->setEnabled(false);
+		}
 		});
 	ui.Tool->Rigister(ui.widget);
 	ui.layerGroup->Rigister(ui.widget);
@@ -174,7 +229,7 @@ void PhotoshopLike::OpenImage() {
 	ui.layerGroup->ClearAllUI();
 	//Todo:这里会内存泄露
 	MyImage::Image* m = MyImage::Image::ReadImage(name.c_str());
-	ui.widget->SetBackground(MyImage::BitMap_32(m->GetHeight(), m->GetWidth(), MyImage::RGBQUAD{ 0,0,0,0 }));
+	ui.widget->SetBackground(MyImage::BitMap_32(m->GetHeight(), m->GetWidth(), MyImage::RGBQUAD{ 255,255,255,0 }));
 	ui.layerGroup->AddLayer(new LayerModel(m));
 }
 
@@ -189,7 +244,7 @@ void PhotoshopLike::CreateNewImage() {
 		MyImage::BitMap_32 t(dialog.GetHeight(), dialog.GetWidth(), rgb);
 		ui.widget->SetBackground(t);
 		ui.layerGroup->AddLayer(new LayerModel(new MyImage::BitMap_32
-		(dialog.GetHeight(), dialog.GetWidth(), MyImage::RGBQUAD{0,0,0,0})));
+		(dialog.GetHeight(), dialog.GetWidth(), MyImage::RGBQUAD{255,255,255,0})));
 	}
 }
 

@@ -12,6 +12,9 @@ public:
 	void SetLock(bool);//设定锁定
 	void SetVisible(bool);//设定可视
 
+	void SetAlpha(unsigned char);//设置透明度
+	unsigned char GetAlpha();//获取透明度
+
 	void BeginDraw();//开始绘画
 	MyImage::Image& GetBuffer();//获取缓冲区
 	void EndDraw();//结束绘画
@@ -34,7 +37,8 @@ private:
 	bool _isLock;//图层是否锁定
 	bool _isVisible;//图层是否可视
 	bool _isPainting;//图层正在被绘制
+	unsigned char _alpha = 255;//当前图层透明度
 	OverlayMode _overlayMode;//当前图层的渲染模式;
-	std::function<MyImage::RGBQUAD(const MyImage::RGBQUAD&, const MyImage::RGBQUAD&)> _overlayHandler;//颜色混合函数
+	std::function<MyImage::RGBQUAD(const MyImage::RGBQUAD&, const MyImage::RGBQUAD&, unsigned char)> _overlayHandler;//颜色混合函数
 };
 

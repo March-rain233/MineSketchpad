@@ -1,5 +1,8 @@
 #include "LayerGroup.h"
 #include <qmessagebox.h>
+#include <qstandardpaths.h>
+#include <QTextCodec>
+#include <qfiledialog.h>
 
 LayerGroup::LayerGroup(QWidget *parent)
 	: QWidget(parent)
@@ -9,7 +12,7 @@ LayerGroup::LayerGroup(QWidget *parent)
 	connect(ui.NewLayer, &QPushButton::clicked, [this] {
 		int num = _device->GetSelected()[_device->GetSelected().size() - 1];
 		LayerModel* layer = new LayerModel(new MyImage::BitMap_32
-		(_device->GetImageHeight(), _device->GetImageWidth(), MyImage::RGBQUAD{ 0,0,0,0 }));
+		(_device->GetImageHeight(), _device->GetImageWidth(), MyImage::RGBQUAD{ 255,255,255,0 }));
 		InsertLayer(layer, num + 1);
 		});
 	connect(ui.DeleteLayer, &QPushButton::clicked, [this] {
@@ -22,6 +25,7 @@ LayerGroup::LayerGroup(QWidget *parent)
 			ClearLayer(_device->GetSelected()[i]);
 		}
 		});
+	connect(ui.openFile, &QPushButton::clicked, this, &LayerGroup::OpenFile);
 }
 
 LayerGroup::~LayerGroup()
@@ -30,7 +34,7 @@ LayerGroup::~LayerGroup()
 
 void LayerGroup::Rigister(DrawCanvas* device) {
 	_device = device;
-	connect(_device, &DrawCanvas::EmptyChange, this, &LayerGroup::CloseActions);
+	connect(_device, &DrawCanvas::EmptyChanged, this, &LayerGroup::CloseActions);
 }
 
 void LayerGroup::AddLayer(LayerModel* layer) {
@@ -139,10 +143,42 @@ void LayerGroup::ClearAllUI() {
 	_layerUIs.clear();
 }
 
+void LayerGroup::OpenFile() {
+	QString OpenFile, OpenFilePath;
+	OpenFile = QFileDialog::getOpenFileName(
+		this,
+		"选择图片",
+		QStandardPaths::writableLocation(QStandardPaths::DesktopLocation),
+		"Image Files(*.bmp)");
+	if (OpenFile.isEmpty()) {
+		return;
+	}
+	QTextCodec* code = QTextCodec::codecForName("GB2312");//解决中文路径问题
+	std::string name = code->fromUnicode(OpenFile).data();
+	MyImage::Image* m = MyImage::Image::ReadImage(name.c_str());
+	int h = _device->GetImageHeight();
+	int w = _device->GetImageWidth();
+	int ch = m->GetHeight();
+	int cw = m->GetWidth();
+	MyImage::Image* m2 = new MyImage::BitMap_32(h, w);
+	for (int i = 0; i < h; ++i) {
+		for (int j = 0; j < w; ++j) {
+			if (i < ch && j < cw) {
+				m2->SetPixel(j, i, m->GetPixel(j, i));
+			}
+			else {
+				m2->SetPixel(j, i, MyImage::RGBQUAD{ 255,255,255,0 });
+			}
+		}
+	}
+	AddLayer(new LayerModel(m2));
+}
+
 void LayerGroup::CloseActions(bool v) {
 	ui.ClearLayer->setEnabled(v);
 	ui.DeleteLayer->setEnabled(v);
 	ui.NewLayer->setEnabled(v);
+	ui.openFile->setEnabled(v);
 }
 
 void LayerGroup::UnCheckOther(int index) {
