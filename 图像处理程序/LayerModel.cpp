@@ -26,6 +26,16 @@ MyImage::Image& LayerModel::GetImage() {
     return *_image;
 }
 
+void LayerModel::SetImage(MyImage::Image* im) {
+    if (_image) {
+        delete _image;
+        delete _buffer;
+    }
+    _image = im->Clone();
+    _buffer = im->Clone();
+    Update();
+}
+
 bool LayerModel::IsLock() {
     return _isLock && _isVisible;
 }
@@ -55,6 +65,10 @@ MyImage::Image& LayerModel::GetBuffer() {
 void LayerModel::EndDraw() {
     _isPainting = false;
     std::swap(_buffer, _image);
+}
+
+void LayerModel::CancelDraw() {
+    _isPainting = false;
 }
 
 void LayerModel::PaintEvent(MyImage::Image& canvas) {

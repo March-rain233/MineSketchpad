@@ -23,8 +23,14 @@ public:
 	void operator -=(std::function<void(Arg...)> p) {
 		Remove(p);
 	}
+	void BlockSign(bool v) {
+		_block = v;
+	}
 private:
 	void Invoke(Arg... args) {
+		if (_block) {
+			return;
+		}
 		if (_list.size() <= 0) {
 			return;
 		}
@@ -39,4 +45,5 @@ private:
 	}
 private:
 	QVector<std::function<void(Arg...)>> _list;
+	bool _block = false;
 };

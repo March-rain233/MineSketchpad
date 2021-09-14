@@ -36,6 +36,10 @@ DrawToolsUI* DrawToolUIFactory::Create(QString name, QWidget* parent) {
         res = new FilterPenUI(parent);
         res->_tool = tool;
     }
+    else if (name == "Spectroscope") {
+        res = new DrawToolsUI(parent);
+        res->_tool = tool;
+    }
     res->Init();
 
     _pool.insert(name, res);

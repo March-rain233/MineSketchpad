@@ -66,3 +66,14 @@ public:
 	std::function<void(void)> Redo;
 	std::function<void(void)> Undo;
 };
+
+class CopyCommand :
+	public DrawCommand {
+public:
+	~CopyCommand();
+	virtual void Execute() override;
+	virtual void Unexecute() override;
+	MyImage::Image* Last = nullptr;
+	MyImage::Image* After = nullptr;
+	LayerModel* Target = nullptr;
+};

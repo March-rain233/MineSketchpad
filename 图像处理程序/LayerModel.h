@@ -6,6 +6,7 @@ public:
 	LayerModel(MyImage::Image*, OverlayMode mode = OverlayMode::Normal);
 	~LayerModel();
 	MyImage::Image& GetImage();//向外界提供图像资源以修改
+	void SetImage(MyImage::Image*);//设置图片
 	bool IsLock();//图层是否锁定
 	bool IsVisible();//图层是否可视
 	void SetLock(bool);//设定锁定
@@ -14,6 +15,7 @@ public:
 	void BeginDraw();//开始绘画
 	MyImage::Image& GetBuffer();//获取缓冲区
 	void EndDraw();//结束绘画
+	void CancelDraw();//放弃绘画
 
 	void PaintEvent(MyImage::Image&);//将图层以自身的渲染模式渲染到画布上
 	inline void PaintEvent(int, MyImage::Image&);

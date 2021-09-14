@@ -72,3 +72,20 @@ void GroupCommand::Unexecute() {
 void GroupCommand::PushBackCommand(DrawCommand* c) {
 	_commands.push_back(c);
 }
+
+CopyCommand::~CopyCommand() {
+	if (Last) {
+		delete Last;
+	}
+	if (After) {
+		delete After;
+	}
+}
+
+void CopyCommand::Execute() {
+	Target->SetImage(After);
+}
+
+void CopyCommand::Unexecute() {
+	Target->SetImage(Last);
+}

@@ -3,17 +3,17 @@
 #include<qdebug>
 using namespace MyImage;
 
-const Image& MyImage::Image::ToGrayScale() {
-	BitMap_32 res(GetHeight(), GetWidth());
+Image& MyImage::Image::ToGrayScale() {
+	BitMap_32* res = new BitMap_32(GetHeight(), GetWidth());
 	for (int i = 0; i < GetHeight(); ++i) {
 		for (int j = 0; j < GetWidth(); ++j) {
-			RGBQUAD temp = GetPixel(i, j);
+			RGBQUAD temp = GetPixel(j, i);
 			temp.rgbBlue = temp.rgbGreen = temp.rgbRed = 
 				(temp.rgbRed * 299 + temp.rgbGreen * 587 + temp.rgbBlue * 114) / 1000;
-			res.SetPixel(i, j, temp);
+			res->SetPixel(j, i, temp);
 		}
 	}
-	return res;
+	return *res;
 }
 
 Image* MyImage::Image::ReadImage(const char* filename) {

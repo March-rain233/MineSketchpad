@@ -7,6 +7,8 @@
 #include <QTextCodec>
 #include "LayerModel.h"
 #include "DrawCommand.h"
+#include "ChangeHSL.h"
+#include "ChangeContrast.h"
 
 PhotoshopLike::PhotoshopLike(QWidget* parent)
 	: QMainWindow(parent) {
@@ -27,6 +29,56 @@ PhotoshopLike::PhotoshopLike(QWidget* parent)
 
 	connect(ui.imageSize, &QAction::triggered, [this] {
 
+		});
+
+	connect(ui.HSL, &QAction::triggered, [this] {
+		ChangeHSL t(ui.widget, this);
+		t.exec();
+		});
+	connect(ui.cb, &QAction::triggered, [this] {
+		ChangeContrast t(ui.widget, this);
+		t.exec();
+		});
+	connect(ui.gray, &QAction::triggered, [this] {
+		auto layer = ui.widget->GetLayers();
+		auto select = ui.widget->GetSelected();
+		GroupCommand* group = new GroupCommand();
+		for (int i = 0; i < select.size(); ++i) {
+			CopyCommand* copy = new CopyCommand();
+			copy->Target = layer[select[i]];
+			copy->Last = layer[select[i]]->GetImage().Clone();
+			copy->After = layer[select[i]]->GetImage().ToGrayScale().Clone();
+			layer[select[i]]->SetImage(copy->After);
+			group->PushBackCommand(copy);
+		}
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
+		});
+	connect(ui.inverse, &QAction::triggered, [this] {
+		auto layer = ui.widget->GetLayers();
+		auto select = ui.widget->GetSelected();
+		GroupCommand* group = new GroupCommand();
+		for (int i = 0; i < select.size(); ++i) {
+			CopyCommand* copy = new CopyCommand();
+			copy->Target = layer[select[i]];
+			copy->Last = layer[select[i]]->GetImage().Clone();
+			copy->After = layer[select[i]]->GetImage().Clone();
+			for (int i = 0; i < copy->After->GetWidth(); ++i) {
+				for (int j = 0; j < copy->After->GetHeight(); ++j) {
+					auto t = copy->After->GetPixel(i, j);
+					t.rgbBlue = 255 - t.rgbBlue;
+					t.rgbRed = 255 - t.rgbRed;
+					t.rgbGreen = 255 - t.rgbGreen;
+					copy->After->SetPixel(i, j, t);
+				}
+			}
+			layer[select[i]]->SetImage(copy->After);
+			group->PushBackCommand(copy);
+		}
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
 		});
 
 	connect(ui.rotate90, &QAction::triggered, [this] {

@@ -4,6 +4,7 @@
 #include "MyPaletteModel.h"
 #include "OverlayFunction.h"
 #include "FilterFactory.h"
+#include "Spectroscope.h"
 
 ToolFactory* ToolFactory::_instance = nullptr;
 
@@ -56,13 +57,16 @@ DrawTools* ToolFactory::Create(QString name) {
 	else if (name == "MoveHand") {
 		res = new MoveHand();
 	}
-	else if (name == "FilterPen"){
+	else if (name == "FilterPen") {
 		FilterPen* p = new FilterPen();
 		p->SetRadius(3);
 		p->SetAlpha(255);
 		auto f = FilterFactory::Create(1, FilterType::Normal);
 		p->SetFilter(f);
 		res = p;
+	}
+	else if (name == "Spectroscope") {
+		res = new Spectroscope();
 	}
 	return res;
 }

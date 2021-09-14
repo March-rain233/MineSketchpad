@@ -115,6 +115,15 @@
     <ClCompile Include="ChangeHSL.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Spectroscope.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeContrast.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeSize.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="DrawCommand.h">
@@ -159,6 +168,9 @@
     <ClInclude Include="ImageFilter.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Spectroscope.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <QtMoc Include="DrawCanvas.h">
@@ -197,6 +209,12 @@
     <QtMoc Include="ChangeHSL.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="ChangeContrast.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ChangeSize.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DrawCanvas.ui">
@@ -230,6 +248,12 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="ChangeHSL.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ChangeContrast.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ChangeSize.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

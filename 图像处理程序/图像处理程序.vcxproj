@@ -91,7 +91,9 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="ChangeContrast.cpp" />
     <ClCompile Include="ChangeHSL.cpp" />
+    <ClCompile Include="ChangeSize.cpp" />
     <ClCompile Include="DrawToolsUI.cpp" />
     <ClCompile Include="DrawToolUIFactory.cpp" />
     <ClCompile Include="FilterFactory.cpp" />
@@ -107,10 +109,13 @@
     <ClCompile Include="MyPaletteModel.cpp" />
     <ClCompile Include="OverlayFunctionFactory.cpp" />
     <ClCompile Include="PencilUI.cpp" />
+    <ClCompile Include="Spectroscope.cpp" />
     <ClCompile Include="ToolFactory.cpp" />
     <ClCompile Include="Tools.cpp" />
     <QtRcc Include="PhotoshopLike.qrc" />
+    <QtUic Include="ChangeContrast.ui" />
     <QtUic Include="ChangeHSL.ui" />
+    <QtUic Include="ChangeSize.ui" />
     <QtUic Include="CreateImage.ui" />
     <QtUic Include="DrawCanvas.ui" />
     <QtUic Include="DrawToolsUI.ui" />
@@ -135,6 +140,8 @@
   <ItemGroup>
     <QtMoc Include="DrawToolsUI.h" />
     <QtMoc Include="ChangeHSL.h" />
+    <QtMoc Include="ChangeContrast.h" />
+    <QtMoc Include="ChangeSize.h" />
     <ClInclude Include="DrawToolUIFactory.h" />
     <QtMoc Include="MyPalette.h" />
     <QtMoc Include="LayerGroup.h" />
@@ -151,6 +158,7 @@
     <ClInclude Include="OverlayFunctionFactory.h" />
     <ClInclude Include="Pencil.h" />
     <QtMoc Include="PencilUI.h" />
+    <ClInclude Include="Spectroscope.h" />
     <ClInclude Include="ToolFactory.h" />
     <QtMoc Include="Tools.h" />
     <QtMoc Include="DrawCanvas.h" />

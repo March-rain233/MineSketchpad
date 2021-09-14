@@ -13,19 +13,18 @@ void MeanHandler(double* buffer, int radius) {
 void GuassianHandler(double* buffer, int radius) {
 	const double PI = 4.0 * atan(1.0); //Ô²ÖÜÂÊ¦Ğ¸³Öµ
 	int sigma = 1;
-	int size = (radius * 2 + 1) * (radius * 2 + 1);
-	int w = radius * 2 + 1;
+	int size = (radius * 2 + 1);
 	int center = size / 2;
 	double sum = 0;
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
-			buffer[i * w + j] = (1 / (2 * PI * sigma * sigma)) * exp(-((i - center) * (i - center) + (j - center) * (j - center)) / (2 * sigma * sigma));
-			sum += buffer[i * w + j];
+			buffer[i * size + j] = (1 / (2 * PI * sigma * sigma)) * exp(-((i - center) * (i - center) + (j - center) * (j - center)) / (2 * sigma * sigma));
+			sum += buffer[i * size + j];
 		}
 	}
 	for (int i = 0; i < size; i++) {
 		for (int j = 0; j < size; j++) {
-			buffer[i * w + j] /= sum;
+			buffer[i * size + j] /= sum;
 		}
 	}
 }
