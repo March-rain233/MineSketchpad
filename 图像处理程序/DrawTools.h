@@ -14,7 +14,6 @@ public:
 	virtual bool mousePressEvent(QMouseEvent*) = 0;//鼠标按下事件
 	virtual bool mouseReleaseEvent(QMouseEvent*) = 0;//鼠标释放事件
 	virtual bool mouseMoveEvent(QMouseEvent*) = 0;//鼠标移动事件
-protected:
 	DrawCanvas& GetDevice();
 private:
 	DrawCanvas* _device;

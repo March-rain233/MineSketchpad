@@ -207,6 +207,13 @@ void DrawCanvas::Resize(int h, int w) {
 	update();
 }
 
+void DrawCanvas::ChangeCanvas(int h, int w) {
+	_canvas->Resize(h, w);
+	_canvasFill->Resize(h, w);
+}
+
+
+
 void DrawCanvas::ReDraw() {
 	memcpy(_canvas->GetBits(), _canvasFill->GetBits(),
 		_canvas->GetWidth() * _canvas->GetHeight() * 4);

@@ -1,4 +1,6 @@
 #include "MyPaletteModel.h"
+#include <qpainter.h>
+#include <qicon.h>
 
 MyPaletteModel* MyPaletteModel::_instance = nullptr;
 

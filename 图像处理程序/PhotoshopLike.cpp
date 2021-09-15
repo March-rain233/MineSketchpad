@@ -11,6 +11,9 @@
 #include "ChangeContrast.h"
 #include "ChangeSize.h"
 #include "Binaryzation.h"
+#include "CaptureUI.h"
+#include "ChangeRGB.h"
+#include "FilterFactory.h"
 
 PhotoshopLike::PhotoshopLike(QWidget* parent)
 	: QMainWindow(parent) {
@@ -50,6 +53,10 @@ PhotoshopLike::PhotoshopLike(QWidget* parent)
 		});
 	connect(ui.cb, &QAction::triggered, [this] {
 		ChangeContrast t(ui.widget, this);
+		t.exec();
+		});
+	connect(ui.color, &QAction::triggered, [this] {
+		ChangeRGB t(ui.widget, this);
 		t.exec();
 		});
 	connect(ui.gray, &QAction::triggered, [this] {
@@ -93,9 +100,188 @@ PhotoshopLike::PhotoshopLike(QWidget* parent)
 		ui.widget->ReDraw();
 		ui.widget->update();
 		});
+	connect(ui.actionpu, &QAction::triggered, [this] {
+		auto layer = ui.widget->GetLayers();
+		auto select = ui.widget->GetSelected();
+		GroupCommand* group = new GroupCommand();
+		auto check = [](double v) {
+			return v < 0 ? 0 : v>255 ? 255 : v;
+		};
+		for (int i = 0; i < select.size(); ++i) {
+			CopyCommand* copy = new CopyCommand();
+			copy->Target = layer[select[i]];
+			copy->Last = layer[select[i]]->GetImage().Clone();
+			copy->After = layer[select[i]]->GetImage().Clone();
+			for (int i = 0; i < copy->After->GetWidth(); ++i) {
+				for (int j = 0; j < copy->After->GetHeight(); ++j) {
+					auto t = copy->After->GetPixel(i, j);
+					t.rgbBlue = check(t.rgbBlue * 1.2 +t.rgbBlue);
+					t.rgbRed = check(t.rgbRed * 1.2 + t.rgbRed);
+					t.rgbGreen = check(t.rgbGreen * 1.2 + t.rgbGreen);
+					copy->After->SetPixel(i, j, t);
+				}
+			}
+			layer[select[i]]->SetImage(copy->After);
+			group->PushBackCommand(copy);
+		}
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
+		});
 	connect(ui.bianry, &QAction::triggered, [this] {
 		Binaryzation bi(ui.widget, this);
 		bi.exec();
+		});
+	connect(ui.mas, &QAction::triggered, [this] {
+		auto layer = ui.widget->GetLayers();
+		auto select = ui.widget->GetSelected();
+		GroupCommand* group = new GroupCommand();
+		for (int i = 0; i < select.size(); ++i) {
+			CopyCommand* copy = new CopyCommand();
+			copy->Target = layer[select[i]];
+			copy->Last = layer[select[i]]->GetImage().Clone();
+			copy->After = layer[select[i]]->GetImage().Clone();
+			copy->After->Resize(20, 20);
+			copy->After->Resize(layer[select[i]]->GetImage().GetHeight(), layer[select[i]]->GetImage().GetWidth());
+			layer[select[i]]->SetImage(copy->After);
+			group->PushBackCommand(copy);
+		}
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
+		});
+	connect(ui.actiona, &QAction::triggered, [this] {
+		auto layer = ui.widget->GetLayers();
+		auto select = ui.widget->GetSelected();
+		GroupCommand* group = new GroupCommand();
+		ImageFilter* f = FilterFactory::Create(2, FilterType::Guassian);
+		for (int i = 0; i < select.size(); ++i) {
+			CopyCommand* copy = new CopyCommand();
+			copy->Target = layer[select[i]];
+			copy->Last = layer[select[i]]->GetImage().Clone();
+			copy->After = layer[select[i]]->GetImage().Clone();
+			f->FliterImage(*copy->After);
+			layer[select[i]]->SetImage(copy->After);
+			group->PushBackCommand(copy);
+		}
+		delete f;
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
+		});
+	connect(ui.actionb, &QAction::triggered, [this] {
+		auto layer = ui.widget->GetLayers();
+		auto select = ui.widget->GetSelected();
+		GroupCommand* group = new GroupCommand();
+		ImageFilter* f = FilterFactory::Create(2, FilterType::Mean);
+		for (int i = 0; i < select.size(); ++i) {
+			CopyCommand* copy = new CopyCommand();
+			copy->Target = layer[select[i]];
+			copy->Last = layer[select[i]]->GetImage().Clone();
+			copy->After = layer[select[i]]->GetImage().Clone();
+			f->FliterImage(*copy->After);
+			layer[select[i]]->SetImage(copy->After);
+			group->PushBackCommand(copy);
+		}
+		delete f;
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
+		});
+	connect(ui.actionc, &QAction::triggered, [this] {
+		auto layer = ui.widget->GetLayers();
+		auto select = ui.widget->GetSelected();
+		GroupCommand* group = new GroupCommand();
+		ImageFilter* f = FilterFactory::Create(2, FilterType::Median);
+		for (int i = 0; i < select.size(); ++i) {
+			CopyCommand* copy = new CopyCommand();
+			copy->Target = layer[select[i]];
+			copy->Last = layer[select[i]]->GetImage().Clone();
+			copy->After = layer[select[i]]->GetImage().Clone();
+			f->FliterImage(*copy->After);
+			layer[select[i]]->SetImage(copy->After);
+			group->PushBackCommand(copy);
+		}
+		delete f;
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
+		});
+	connect(ui.actiond, &QAction::triggered, [this] {
+		auto layer = ui.widget->GetLayers();
+		auto select = ui.widget->GetSelected();
+		GroupCommand* group = new GroupCommand();
+		ImageFilter* f = FilterFactory::Create(2, FilterType::Sharpen);
+		for (int i = 0; i < select.size(); ++i) {
+			CopyCommand* copy = new CopyCommand();
+			copy->Target = layer[select[i]];
+			copy->Last = layer[select[i]]->GetImage().Clone();
+			copy->After = layer[select[i]]->GetImage().Clone();
+			f->FliterImage(*copy->After);
+			layer[select[i]]->SetImage(copy->After);
+			group->PushBackCommand(copy);
+		}
+		delete f;
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
+		});
+	connect(ui.actione, &QAction::triggered, [this] {
+		auto layer = ui.widget->GetLayers();
+		auto select = ui.widget->GetSelected();
+		GroupCommand* group = new GroupCommand();
+		ImageFilter* f = FilterFactory::Create(2, FilterType::EdgeDetection);
+		for (int i = 0; i < select.size(); ++i) {
+			CopyCommand* copy = new CopyCommand();
+			copy->Target = layer[select[i]];
+			copy->Last = layer[select[i]]->GetImage().Clone();
+			copy->After = layer[select[i]]->GetImage().Clone();
+			f->FliterImage(*copy->After);
+			layer[select[i]]->SetImage(copy->After);
+			group->PushBackCommand(copy);
+		}
+		delete f;
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
+		});
+	connect(ui.actionf, &QAction::triggered, [this] {
+		auto layer = ui.widget->GetLayers();
+		auto select = ui.widget->GetSelected();
+		GroupCommand* group = new GroupCommand();
+		ImageFilter* f = FilterFactory::Create(2, FilterType::Embossing);
+		for (int i = 0; i < select.size(); ++i) {
+			CopyCommand* copy = new CopyCommand();
+			copy->Target = layer[select[i]];
+			copy->Last = layer[select[i]]->GetImage().Clone();
+			copy->After = layer[select[i]]->GetImage().Clone();
+			f->FliterImage(*copy->After);
+			layer[select[i]]->SetImage(copy->After);
+			group->PushBackCommand(copy);
+		}
+		delete f;
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
+		});
+	connect(ui.actiong, &QAction::triggered, [this] {
+		auto layer = ui.widget->GetLayers();
+		auto select = ui.widget->GetSelected();
+		GroupCommand* group = new GroupCommand();
+		ImageFilter* f = FilterFactory::Create(2, FilterType::MotionBlur);
+		for (int i = 0; i < select.size(); ++i) {
+			CopyCommand* copy = new CopyCommand();
+			copy->Target = layer[select[i]];
+			copy->Last = layer[select[i]]->GetImage().Clone();
+			copy->After = layer[select[i]]->GetImage().Clone();
+			f->FliterImage(*copy->After);
+			layer[select[i]]->SetImage(copy->After);
+			group->PushBackCommand(copy);
+		}
+		delete f;
+		ui.widget->PushCommand(group);
+		ui.widget->ReDraw();
+		ui.widget->update();
 		});
 
 	connect(ui.rotate90, &QAction::triggered, [this] {
@@ -185,6 +371,51 @@ PhotoshopLike::PhotoshopLike(QWidget* parent)
 		ui.widget->PushCommand(group);
 		ui.widget->ReDraw();
 		ui.widget->update();
+		});
+	connect(ui.cut, &QAction::triggered, [this] {
+		CaptureUI cap;
+		if (cap.exec() == QDialog::Accepted) {
+			auto layer = ui.widget->GetLayers();
+			int h, w, oldh, oldw;
+			oldh = ui.widget->GetImageHeight();
+			oldw = ui.widget->GetImageWidth();
+			GroupCommand* group = new GroupCommand();
+			FunctionCommand* func2 = new FunctionCommand();
+			func2->Redo = [this, h, w]() {
+				ui.widget->ReDraw();
+				ui.widget->update();
+			};
+			func2->Undo = [this, oldh, oldw]() {
+				ui.widget->Resize(oldh, oldw);
+			};
+			group->PushBackCommand(func2);
+			for (int i = 0; i < layer.size(); ++i) {
+				CopyCommand* copy = new CopyCommand();
+				copy->Target = layer[i];
+				copy->Last = layer[i]->GetImage().Clone();
+				copy->After = layer[i]->GetImage().Clone();
+				copy->After->Crop(cap.GetX1(), cap.GetY1(), cap.GetX2(), cap.GetY2());
+				h = copy->After->GetHeight();
+				w = copy->After->GetWidth();
+				layer[i]->VisibleChanged.BlockSign(true);
+				layer[i]->SetImage(copy->After);
+				layer[i]->VisibleChanged.BlockSign(false);
+				group->PushBackCommand(copy);
+			}
+			ui.widget->Resize(h, w);
+			FunctionCommand* func = new FunctionCommand();
+			func->Redo = [this, h, w]() {
+				ui.widget->Resize(h, w);
+			};
+			func->Undo = [this, oldh, oldw]() {
+				ui.widget->ReDraw();
+				ui.widget->update();
+			};
+			group->PushBackCommand(func);
+			ui.widget->PushCommand(group);
+			ui.widget->ReDraw();
+			ui.widget->update();
+		}
 		});
 
 	connect(ui.exit, &QAction::triggered, [] {

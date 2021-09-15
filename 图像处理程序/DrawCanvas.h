@@ -51,6 +51,7 @@ public:
 	void ClearCanvas();//清除画板
 	bool IsEmpty();//是否在工作
 	void Resize(int h, int w);//缩放图片
+	void ChangeCanvas(int h, int w);
 
 	void ReDraw();//重新完全绘制画布
 	void ReDraw(int);//重绘一维数组i处点

@@ -158,20 +158,21 @@ void LayerGroup::OpenFile() {
 	MyImage::Image* m = MyImage::Image::ReadImage(name.c_str());
 	int h = _device->GetImageHeight();
 	int w = _device->GetImageWidth();
-	int ch = m->GetHeight();
-	int cw = m->GetWidth();
-	MyImage::Image* m2 = new MyImage::BitMap_32(h, w);
-	for (int i = 0; i < h; ++i) {
-		for (int j = 0; j < w; ++j) {
-			if (i < ch && j < cw) {
-				m2->SetPixel(j, i, m->GetPixel(j, i));
-			}
-			else {
-				m2->SetPixel(j, i, MyImage::RGBQUAD{ 255,255,255,0 });
-			}
-		}
-	}
-	AddLayer(new LayerModel(m2));
+	m->Resize(h, w);
+	//int ch = m->GetHeight();
+	//int cw = m->GetWidth();
+	//MyImage::Image* m2 = new MyImage::BitMap_32(h, w);
+	//for (int i = 0; i < h; ++i) {
+	//	for (int j = 0; j < w; ++j) {
+	//		if (i < ch && j < cw) {
+	//			m2->SetPixel(j, i, m->GetPixel(j, i));
+	//		}
+	//		else {
+	//			m2->SetPixel(j, i, MyImage::RGBQUAD{ 255,255,255,0 });
+	//		}
+	//	}
+	//}
+	AddLayer(new LayerModel(m));
 }
 
 void LayerGroup::CloseActions(bool v) {

@@ -5,14 +5,6 @@
 #include<qdebug.h>
 #include<QButtonGroup>
 
-QIcon createColorIcon(QColor color, QSize size) {
-	QPixmap pixmap(size.width(),size.height());
-	QPainter painter(&pixmap);
-	painter.setPen(Qt::NoPen);
-	painter.fillRect(QRect(0, 0, size.width(), size.height()), color);
-	return QIcon(pixmap);
-}
-
 Tools::Tools(QWidget *parent)
 	: QWidget(parent)
 {

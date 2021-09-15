@@ -92,8 +92,11 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Binaryzation.cpp" />
+    <ClCompile Include="capturescreen.cpp" />
+    <ClCompile Include="CaptureUI.cpp" />
     <ClCompile Include="ChangeContrast.cpp" />
     <ClCompile Include="ChangeHSL.cpp" />
+    <ClCompile Include="ChangeRGB.cpp" />
     <ClCompile Include="ChangeSize.cpp" />
     <ClCompile Include="DrawToolsUI.cpp" />
     <ClCompile Include="DrawToolUIFactory.cpp" />
@@ -104,19 +107,22 @@
     <ClCompile Include="LayerGroup.cpp" />
     <ClCompile Include="LayerModel.cpp" />
     <ClCompile Include="LayerUI.cpp" />
-    <ClCompile Include="Mat.cpp" />
     <ClCompile Include="MoveHand.cpp" />
     <ClCompile Include="MyPalette.cpp" />
     <ClCompile Include="MyPaletteModel.cpp" />
     <ClCompile Include="OverlayFunctionFactory.cpp" />
     <ClCompile Include="PencilUI.cpp" />
     <ClCompile Include="Spectroscope.cpp" />
+    <ClCompile Include="SpectroscopeUI.cpp" />
     <ClCompile Include="ToolFactory.cpp" />
     <ClCompile Include="Tools.cpp" />
     <QtRcc Include="PhotoshopLike.qrc" />
     <QtUic Include="Binaryzation.ui" />
+    <QtUic Include="capturescreen.ui" />
+    <QtUic Include="CaptureUI.ui" />
     <QtUic Include="ChangeContrast.ui" />
     <QtUic Include="ChangeHSL.ui" />
+    <QtUic Include="ChangeRGB.ui" />
     <QtUic Include="ChangeSize.ui" />
     <QtUic Include="CreateImage.ui" />
     <QtUic Include="DrawCanvas.ui" />
@@ -137,6 +143,7 @@
     <ClCompile Include="Pencil.cpp" />
     <ClCompile Include="PhotoshopLike.cpp" />
     <ClCompile Include="main.cpp" />
+    <QtUic Include="SpectroscopeUI.ui" />
     <QtUic Include="Tools.ui" />
   </ItemGroup>
   <ItemGroup>
@@ -145,6 +152,9 @@
     <QtMoc Include="ChangeContrast.h" />
     <QtMoc Include="ChangeSize.h" />
     <QtMoc Include="Binaryzation.h" />
+    <QtMoc Include="capturescreen.h" />
+    <QtMoc Include="CaptureUI.h" />
+    <QtMoc Include="ChangeRGB.h" />
     <ClInclude Include="DrawToolUIFactory.h" />
     <QtMoc Include="MyPalette.h" />
     <QtMoc Include="LayerGroup.h" />
@@ -162,6 +172,7 @@
     <ClInclude Include="Pencil.h" />
     <QtMoc Include="PencilUI.h" />
     <ClInclude Include="Spectroscope.h" />
+    <QtMoc Include="SpectroscopeUI.h" />
     <ClInclude Include="ToolFactory.h" />
     <QtMoc Include="Tools.h" />
     <QtMoc Include="DrawCanvas.h" />

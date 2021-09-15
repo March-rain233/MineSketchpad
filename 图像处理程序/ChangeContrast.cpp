@@ -1,10 +1,19 @@
 #include "ChangeContrast.h"
 #include "Image.h"
-void Handler(MyImage::Image* buffer, MyImage::Image* res, double c, double b) {
+void Handler(MyImage::Image* buffer, MyImage::Image* res, double c , double b) {
 	int total = res->GetWidth() * res->GetHeight();
 	float k = tan((45 + 44 * c) / 180.0 * 3.1415926535);
-	auto cal = [b, c, k](unsigned char& v) {
-		v = ((v * 255.0 - 127.5 * (1.0 - b)) * k + 127.5 * (1.0 + b)) / 255.0;
+	auto check = [](double v)->unsigned char {
+		if (v < 0) {
+			return 0;
+		}
+		if (v > 255) {
+			return 255;
+		}
+		return v;
+	};
+	auto cal = [b, c, k, check](unsigned char& v) {
+		v = check((v - 127.5 * (1 - b)) * k + 127.5 * (1 + b));
 	};
 	for (int i = 0; i < total; ++i) {
 		auto t = res->GetPixel(i);

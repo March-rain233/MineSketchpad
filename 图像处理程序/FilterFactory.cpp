@@ -36,14 +36,25 @@ void SharpenHandler(double* buffer, int radius) {
 }
 
 void EdgeDetectionHandler(double* buffer, int radius) {
-	qFill(buffer, buffer + (radius * 2 + 1) * (radius * 2 + 1), -1 * 1);
-	buffer[(radius * 2 + 1) * (radius * 2 + 1) / 2] =
-		((radius * 2 + 1) * (radius * 2 + 1) - 1) * 1;
+	int w = radius * 2 + 1;
+	for (int i = 0; i < w; ++i) {
+		for (int j = 0; j < w; ++j) {
+			if (i == radius && j == radius) {
+				buffer[i * w + j] = w;
+			}
+			else if (j == i) {
+				buffer[i * w + j] = -1;
+			}
+			else {
+				buffer[i * w + j] = 0;
+			}
+		}
+	}
 }
 
 void MotionBlurHandler(double* buffer, int radius) {
 	int w = radius * 2 + 1;
-	double v = 1 / w;
+	double v = 1.0 / w;
 	for (int i = 0; i < w; ++i) {
 		for (int j = 0; j < w; ++j) {
 			if (i == j) {
@@ -54,25 +65,23 @@ void MotionBlurHandler(double* buffer, int radius) {
 			}
 		}
 	}
-	buffer[radius * w + radius] = 0;
 }
 
 void EmbossingHandler(double* buffer, int radius) {
 	int w = radius * 2 + 1;
 	for (int i = 0; i < w; ++i) {
 		for (int j = 0; j < w; ++j) {
-			if (i <= radius && j <= radius) {
-				buffer[i * w + j] = 1;
+			if (j == w - i - 1) {
+				buffer[i * w + j] = 0;
 			}
-			else if (i >= radius && j >= radius) {
-				buffer[i * w + j] = 1;
+			else if (j < w - i - 1) {
+				buffer[i * w + j] = -1;
 			}
 			else {
-				buffer[i * w + j] = 0;
+				buffer[i * w + j] = 1;
 			}
 		}
 	}
-	buffer[radius * w + radius] = 0;
 }
 
 QMap<FilterType, KernelFactory::CreateHandler> KernelFactory::CreateMap {

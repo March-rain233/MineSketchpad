@@ -347,23 +347,18 @@ inline void Mat<T, compare>::Flip(int code) {
 
 template<typename T, typename compare>
 inline void Mat<T, compare>::Resize(int h, int w) {
-    if (h == 0 || w == 0) {
+    if (IsEmpty()) {
         return;
     }
-    bool wBig = w > _width;
-    double hi = _height / h;
-    double wi = _width / w;
-    double p, q;
-    p = q = 0;
-    auto temp = new T[h * w];
 
-    for (int i = 0; i < h; ++i) {
-        for (int j = 0; j < w; ++j) {
-            temp[i * w + j] = _data[(int)p * _width + (int)q];
-            q += wi;
+    double dy = (double)h / _height;
+    double dx = (double)w / _width;
+    
+    auto temp = new T[h * w];
+    for (int i = 0; i < h; i++) {
+        for (int j = 0; j < w; j++) {
+            temp[j + i * w] = _data[(long)((double)j / dx)  + (long)((double)i / dy)* _width];
         }
-        q = 0;
-        p += hi;
     }
 
     delete[] _data;
@@ -377,8 +372,20 @@ template<typename T, typename compare>
 inline void Mat<T, compare>::Crop(int x1, int y1, int x2, int y2) {
     if (x1 > x2) std::swap(x1, x2);
     if (y1 > y2) std::swap(y1, y2);
-    if (x1 < 0 || y1 < 0 || x2 >= _width || y2 >= _height) {
-        throw new std::out_of_range("³¬³öÍ¼Æ¬±ß½ç");
+    //if (x1 < 0 || y1 < 0 || x2 >= _width || y2 >= _height) {
+    //    throw new std::out_of_range("³¬³öÍ¼Æ¬±ß½ç");
+    //}
+    if (x1 < 0) {
+        x1 = 0;
+    }
+    if (y1 < 0) {
+        y1 = 0;
+    }
+    if (x2 >= _width) {
+        x2 = _width - 1;
+    }
+    if (y2 >= _height) {
+        y2 = _height - 1;
     }
     int h = fabs(y2 - y1);
     int w = fabs(x2 - x1);

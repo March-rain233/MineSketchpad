@@ -64,9 +64,6 @@
     <ClCompile Include="Tools.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Mat.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="ToolFactory.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -125,6 +122,18 @@
       <Filter>Source Files</Filter>
     </ClCompile>
     <ClCompile Include="Binaryzation.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="SpectroscopeUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="capturescreen.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="CaptureUI.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="ChangeRGB.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -221,6 +230,18 @@
     <QtMoc Include="Binaryzation.h">
       <Filter>Header Files</Filter>
     </QtMoc>
+    <QtMoc Include="SpectroscopeUI.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="capturescreen.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="CaptureUI.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
+    <QtMoc Include="ChangeRGB.h">
+      <Filter>Header Files</Filter>
+    </QtMoc>
   </ItemGroup>
   <ItemGroup>
     <QtUic Include="DrawCanvas.ui">
@@ -263,6 +284,18 @@
       <Filter>Form Files</Filter>
     </QtUic>
     <QtUic Include="Binaryzation.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="SpectroscopeUI.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="capturescreen.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="CaptureUI.ui">
+      <Filter>Form Files</Filter>
+    </QtUic>
+    <QtUic Include="ChangeRGB.ui">
       <Filter>Form Files</Filter>
     </QtUic>
   </ItemGroup>

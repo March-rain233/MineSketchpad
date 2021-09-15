@@ -24,7 +24,9 @@ ChangeHSL::ChangeHSL(DrawCanvas* device, QWidget *parent)
 			ChangeS(layer[selected[i]], s, layer[selected[i]]->GetBuffer());
 			ChangeL(layer[selected[i]], l, layer[selected[i]]->GetBuffer());
 		}
-		ui.HT->setText(QString::number(v));
+		ui.HT->setText(QString::number(h));
+		ui.ST->setText(QString::number(s));
+		ui.LT->setText(QString::number(l));
 		device->ReDraw();
 		device->update();
 		});
@@ -43,7 +45,9 @@ ChangeHSL::ChangeHSL(DrawCanvas* device, QWidget *parent)
 			ChangeS(layer[selected[i]], s, layer[selected[i]]->GetBuffer());
 			ChangeL(layer[selected[i]], l, layer[selected[i]]->GetBuffer());
 		}
-		ui.LT->setText(QString::number(v));
+		ui.HT->setText(QString::number(h));
+		ui.ST->setText(QString::number(s));
+		ui.LT->setText(QString::number(l));
 		device->ReDraw();
 		device->update();
 		});
@@ -62,7 +66,9 @@ ChangeHSL::ChangeHSL(DrawCanvas* device, QWidget *parent)
 			ChangeS(layer[selected[i]], s, layer[selected[i]]->GetBuffer());
 			ChangeL(layer[selected[i]], l, layer[selected[i]]->GetBuffer());
 		}
-		ui.ST->setText(QString::number(v));
+		ui.HT->setText(QString::number(h));
+		ui.ST->setText(QString::number(s));
+		ui.LT->setText(QString::number(l));
 		device->ReDraw();
 		device->update();
 		});
@@ -179,5 +185,5 @@ void ChangeHSL::ChangeL(LayerModel* layer, int value, MyImage::Image& res) {
 		cal(color.rgbBlue, para);
 		layer->GetBuffer().SetPixel(i % w, i / w, color);
 	}
-	layer->GetBuffer().PixelChanged.BlockSign(true);
+	layer->GetBuffer().PixelChanged.BlockSign(false);
 }

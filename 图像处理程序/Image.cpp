@@ -99,7 +99,9 @@ MyImage::BitMap_32::~BitMap_32() {
 	delete _data;
 }
 
-void MyImage::BitMap_32::WriteImage(const char* filename) const {
+void MyImage::BitMap_32::WriteImage(const char* filename) {
+	Flip(true);
+
 	std::fstream bmp(filename, std::ios::binary | std::ios::out);
 	BITMAPFILEHEADER bf;
 	BITMAPINFOHEADER bi;
@@ -137,6 +139,7 @@ void MyImage::BitMap_32::WriteImage(const char* filename) const {
 		bmp.write((char*)buffer, 4);
 	}
 	bmp.close();
+	Flip(true);
 }
 
 const RGBQUAD& MyImage::BitMap_32::GetPixel(int col, int row) const {

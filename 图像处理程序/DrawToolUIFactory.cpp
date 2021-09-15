@@ -2,6 +2,7 @@
 #include "ToolFactory.h"
 #include "PencilUI.h"
 #include "FilterPenUI.h"
+#include "SpectroscopeUI.h"
 
 DrawToolUIFactory* DrawToolUIFactory::_instance = nullptr;
 
@@ -37,7 +38,7 @@ DrawToolsUI* DrawToolUIFactory::Create(QString name, QWidget* parent) {
         res->_tool = tool;
     }
     else if (name == "Spectroscope") {
-        res = new DrawToolsUI(parent);
+        res = new SpectroscopeUI(parent);
         res->_tool = tool;
     }
     res->Init();

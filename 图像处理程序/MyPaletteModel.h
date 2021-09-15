@@ -1,7 +1,9 @@
 #pragma once
-#include"Image.h"
-#include"qvector.h"
-#include"MyEvent.h"
+#include "Image.h"
+#include <qvector.h>
+#include "MyEvent.h"
+#include <qicon.h>
+#include <qpainter.h>
 class MyPaletteModel {
 public:
 	static MyPaletteModel& GetInstance();
@@ -24,3 +26,11 @@ private:
 	MyImage::RGBQUAD _frontColor = {0,0,0,255};//Ç°¾°É«
 	MyImage::RGBQUAD _backColor = {0,0,0,255};//±³¾°É«
 };
+
+inline QIcon createColorIcon(QColor color, QSize size) {
+	QPixmap pixmap(size.width(), size.height());
+	QPainter painter(&pixmap);
+	painter.setPen(Qt::NoPen);
+	painter.fillRect(QRect(0, 0, size.width(), size.height()), color);
+	return QIcon(pixmap);
+}

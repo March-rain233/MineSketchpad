@@ -84,17 +84,27 @@
      </property>
      <addaction name="HSL"/>
      <addaction name="cb"/>
+     <addaction name="color"/>
      <addaction name="separator"/>
      <addaction name="gray"/>
      <addaction name="inverse"/>
      <addaction name="bianry"/>
+     <addaction name="mas"/>
+     <addaction name="actionpu"/>
+     <addaction name="separator"/>
+     <addaction name="actiona"/>
+     <addaction name="actionb"/>
+     <addaction name="actionc"/>
+     <addaction name="actiond"/>
+     <addaction name="actione"/>
+     <addaction name="actionf"/>
+     <addaction name="actiong"/>
     </widget>
     <addaction name="menu_J_2"/>
     <addaction name="separator"/>
     <addaction name="imageSize"/>
-    <addaction name="canvasSize"/>
     <addaction name="menu_G"/>
-    <addaction name="action3_4"/>
+    <addaction name="cut"/>
    </widget>
    <widget class="QMenu" name="menu_L">
     <property name="title">
@@ -253,7 +263,7 @@
     <string>画布大小(S)</string>
    </property>
   </action>
-  <action name="action3_4">
+  <action name="cut">
    <property name="text">
     <string>裁剪(P)</string>
    </property>
@@ -514,6 +524,56 @@
   <action name="bianry">
    <property name="text">
     <string>二值化</string>
+   </property>
+  </action>
+  <action name="mas">
+   <property name="text">
+    <string>马赛克化</string>
+   </property>
+  </action>
+  <action name="color">
+   <property name="text">
+    <string>色彩调节</string>
+   </property>
+  </action>
+  <action name="actiona">
+   <property name="text">
+    <string>高斯模糊</string>
+   </property>
+  </action>
+  <action name="actionb">
+   <property name="text">
+    <string>均值模糊</string>
+   </property>
+  </action>
+  <action name="actionc">
+   <property name="text">
+    <string>中值模糊</string>
+   </property>
+  </action>
+  <action name="actiond">
+   <property name="text">
+    <string>锐化</string>
+   </property>
+  </action>
+  <action name="actione">
+   <property name="text">
+    <string>边缘查找</string>
+   </property>
+  </action>
+  <action name="actionf">
+   <property name="text">
+    <string>浮雕</string>
+   </property>
+  </action>
+  <action name="actiong">
+   <property name="text">
+    <string>运动模糊</string>
+   </property>
+  </action>
+  <action name="actionpu">
+   <property name="text">
+    <string>曝光</string>
    </property>
   </action>
  </widget>

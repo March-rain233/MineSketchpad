@@ -41,7 +41,7 @@ namespace MyImage {
 	public:
 		virtual ~Image() {}
 		static Image* ReadImage(const char*);//¶ÁÈ¡Í¼Æ¬
-		virtual void WriteImage(const char*) const = 0;//´¢´æÍ¼Æ¬
+		virtual void WriteImage(const char*) = 0;//´¢´æÍ¼Æ¬
 		virtual const RGBQUAD& GetPixel(int, int) const = 0;//»ñÈ¡ÏñËØ
 		virtual const RGBQUAD& GetPixel(int) const = 0;//»ñÈ¡ÏñËØ
 		virtual void SetPixel(int, int, const RGBQUAD&) = 0;//ÉèÖÃÏñËØ
@@ -75,7 +75,7 @@ namespace MyImage {
 		BitMap_32(const BitMap_32&);
 		~BitMap_32();
 		// Í¨¹ı Image ¼Ì³Ğ
-		virtual void WriteImage(const char*) const override;
+		virtual void WriteImage(const char*) override;
 		virtual const RGBQUAD& GetPixel(int, int) const override;
 		virtual const RGBQUAD& GetPixel(int) const override;
 		virtual void SetPixel(int, int, const RGBQUAD&) override;
@@ -152,6 +152,15 @@ inline double Hue2RGB(double v1, double v2, double vH) {
 inline MyImage::RGBQUAD HSLToRGB(double H, double S, double L) {
 	double R, G, B;
 	double var_1, var_2;
+	auto checked = [](double v)->unsigned char {
+		if (v > 255) {
+			return 255;
+		}
+		if (v < 0) {
+			return 0;
+		}
+		return v;
+	};
 	if (S == 0)                       //HSL values = 0 ¡Â 1
 	{
 		R = L * 255.0;                   //RGB results = 0 ¡Â 255
@@ -168,5 +177,5 @@ inline MyImage::RGBQUAD HSLToRGB(double H, double S, double L) {
 		G = 255.0 * Hue2RGB(var_1, var_2, H);
 		B = 255.0 * Hue2RGB(var_1, var_2, H - (1.0 / 3.0));
 	}
-	return MyImage::RGBQUAD{ (unsigned char)B, (unsigned char)G, (unsigned char)R,255 };
+	return MyImage::RGBQUAD{ checked(B), checked(G), checked(R),255 };
 }
